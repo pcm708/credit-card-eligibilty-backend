@@ -1,0 +1,7 @@
+{
+    "min_age": 18,
+    "min_income": 100000,
+    "min_number_of_credit_cards": 3,
+    "desired_credit_risk": "LOW",
+    "allowed_area_codes": [0,2,5,8]
+}
