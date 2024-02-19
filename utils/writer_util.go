@@ -36,11 +36,11 @@ func StorePreApprovedNumber(phoneNumber string) {
 	}
 }
 
-func LogToJSON(phoneNumber string, message string, status string) error {
+func LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	log.Println("[" + phoneNumber + "]:: " + message)
+	Logger(phoneNumber, message, loglevel)
 
 	filePath, exist := os.LookupEnv("LOG_FILE_PATH")
 	if !exist {
@@ -83,4 +83,8 @@ func LogToJSON(phoneNumber string, message string, status string) error {
 	}
 
 	return nil
+}
+
+func Logger(phoneNumber string, message string, logLevel string) {
+	log.Println(logLevel + ":: " + phoneNumber + "," + message)
 }

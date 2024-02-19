@@ -2,19 +2,19 @@ package services
 
 import (
 	"github.com/honestbank/tech-assignment-backend-engineer/check"
+	"github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"github.com/honestbank/tech-assignment-backend-engineer/utils"
 )
 
 func DecisionEngine(data model.RecordData) string {
-	config := utils.GetConfig()
-	return isApplicantEligible(data, config)
+	return isApplicantEligible(data)
 }
 
-func isApplicantEligible(data model.RecordData, config model.Config) string {
+func isApplicantEligible(data model.RecordData) string {
 	// check is number is preapproved or not
 	if check.IsNumberPreApproved(data) {
-		return config.Approved
+		return constants.APPROVED
 	}
 
 	if !check.IfApplicantPoliticallyExposed(data) &&
@@ -25,9 +25,10 @@ func isApplicantEligible(data model.RecordData, config model.Config) string {
 		check.IfCreditRiskScoreLow(data) {
 
 		utils.StorePreApprovedNumber(data.PhoneNumber)
-		utils.LogToJSON(data.PhoneNumber, "number logged", config.Approved)
-		return config.Approved
+		utils.LogToJSON(data.PhoneNumber, constants.NUMBER_LOGGED,
+			constants.APPROVED, constants.LOG_LEVEL_INFO)
+		return constants.APPROVED
 	}
 
-	return config.Declined
+	return constants.DECLINED
 }

@@ -1,10 +1,10 @@
 package check
 
 import (
-	"log"
 	"strconv"
 	"strings"
 
+	"github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"github.com/honestbank/tech-assignment-backend-engineer/utils"
 )
@@ -33,7 +33,8 @@ func IsValidAreaCode(data model.RecordData) bool {
 			return true
 		}
 	}
-	utils.LogToJSON(data.PhoneNumber, "Area code is not valid", config.Declined)
+	utils.LogToJSON(data.PhoneNumber, constants.INVALID_AREA_CODE,
+		constants.DECLINED, constants.LOG_LEVEL_WARN)
 	return false
 }
 
@@ -42,7 +43,8 @@ func IfValidNumberOfCreditCards(data model.RecordData) bool {
 	if data.NumberOfCreditCards <= config.MinNumberOfCC {
 		return true
 	}
-	utils.LogToJSON(data.PhoneNumber, "Number of credit cards are not valid", config.Declined)
+	utils.LogToJSON(data.PhoneNumber, constants.INVALID_CC_NUMBER,
+		constants.DECLINED, constants.LOG_LEVEL_WARN)
 	return false
 }
 
@@ -51,7 +53,8 @@ func IfValidAge(data model.RecordData) bool {
 	if data.Age >= config.MinAge {
 		return true
 	}
-	utils.LogToJSON(data.PhoneNumber, "Age is not valid", config.Declined)
+	utils.LogToJSON(data.PhoneNumber, constants.INVALID_AGE,
+		constants.DECLINED, constants.LOG_LEVEL_WARN)
 	return false
 }
 
@@ -60,7 +63,8 @@ func IfValidIncome(data model.RecordData) bool {
 	if data.Income >= config.MinIncome {
 		return true
 	}
-	utils.LogToJSON(data.PhoneNumber, "Income is not valid", config.Declined)
+	utils.LogToJSON(data.PhoneNumber, constants.INVALID_INCOME,
+		constants.DECLINED, constants.LOG_LEVEL_WARN)
 	return false
 }
 
@@ -70,14 +74,15 @@ func IfCreditRiskScoreLow(data model.RecordData) bool {
 		calculateCreditRisk(data.Age, data.NumberOfCreditCards) {
 		return true
 	}
-	utils.LogToJSON(data.PhoneNumber, "Credit risk score is not low", config.Declined)
+	utils.LogToJSON(data.PhoneNumber, constants.INVALID_CREDIT_RISK_SCORE,
+		constants.DECLINED, constants.LOG_LEVEL_WARN)
 	return false
 }
 
 func IfApplicantPoliticallyExposed(data model.RecordData) bool {
-	config := utils.GetConfig()
 	if data.PoliticallyExposed {
-		utils.LogToJSON(data.PhoneNumber, "Applicant is politically exposed", config.Declined)
+		utils.LogToJSON(data.PhoneNumber, constants.POLITICALLY_EXPOSED,
+			constants.DECLINED, constants.LOG_LEVEL_WARN)
 		return true
 	}
 	return false
@@ -87,7 +92,8 @@ func IsNumberPreApproved(data model.RecordData) bool {
 	preApprovedNumbers := extractPreApprovedNumbers()
 	for _, number := range preApprovedNumbers {
 		if number == data.PhoneNumber {
-			log.Println("[" + number + "]:: number is preapproved")
+			utils.Logger(number, constants.PREAPPROVED_NUMBER,
+				constants.LOG_LEVEL_INFO)
 			return true
 		}
 	}

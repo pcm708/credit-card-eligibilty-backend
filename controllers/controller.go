@@ -13,26 +13,18 @@ import (
 func ProcessData(resp http.ResponseWriter, req *http.Request) {
 	switch req.Method {
 	case http.MethodPost:
-		decoder := json.NewDecoder(req.Body)
+		// decoder := json.NewDecoder(req.Body)
 		defer req.Body.Close()
 
 		var data model.RecordData
 
-		if err := decoder.Decode(&data); err != nil {
-			resp.Header().Set("Content-Type", "application/json")
-			resp.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(resp).Encode(model.JsonFor4XX{Success: false, Message: err.Error()})
+		err := json.NewDecoder(req.Body).Decode(&data)
+		if err != nil {
+			http.Error(resp, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		if err := data.Validate(); err != nil {
-			resp.Header().Set("Content-Type", "application/json")
-			resp.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(resp).Encode(model.JsonFor4XX{Success: false, Message: err.Error()})
-			return
-		}
-
-		// Perform validation and decision logic here
+		// Perform decision logic here
 		status := services.DecisionEngine(data)
 
 		// Return the response
