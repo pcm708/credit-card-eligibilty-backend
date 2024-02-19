@@ -21,14 +21,14 @@ func ProcessData(resp http.ResponseWriter, req *http.Request) {
 		if err := decoder.Decode(&data); err != nil {
 			resp.Header().Set("Content-Type", "application/json")
 			resp.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(resp).Encode(model.JSONFor400{Success: false, Message: err.Error()})
+			json.NewEncoder(resp).Encode(model.JsonFor4XX{Success: false, Message: err.Error()})
 			return
 		}
 
 		if err := data.Validate(); err != nil {
 			resp.Header().Set("Content-Type", "application/json")
 			resp.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(resp).Encode(model.JSONFor400{Success: false, Message: err.Error()})
+			json.NewEncoder(resp).Encode(model.JsonFor4XX{Success: false, Message: err.Error()})
 			return
 		}
 
