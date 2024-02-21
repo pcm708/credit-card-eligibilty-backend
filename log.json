@@ -1,0 +1,14 @@
+[
+    {
+        "phone_number": "084-326-1123",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-02-21 15:29:42"
+    },
+    {
+        "phone_number": "084-326-1123",
+        "status": "approved",
+        "message": "number logged",
+        "timestamp": "2024-02-21 15:29:53"
+    }
+]
