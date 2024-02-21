@@ -3,12 +3,14 @@ package reader
 import (
 	"encoding/json"
 	"fmt"
-	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
-	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"io/ioutil"
+
 	"log"
 	"os"
 	"strings"
+
+	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"github.com/honestbank/tech-assignment-backend-engineer/model"
 )
 
 // ReaderInterface is an interface for the ReaderImpl.

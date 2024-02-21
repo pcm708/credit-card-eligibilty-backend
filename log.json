@@ -1,14 +1,20 @@
 [
     {
         "phone_number": "084-326-1123",
-        "status": "declined",
-        "message": "applicant is politically exposed",
-        "timestamp": "2024-02-21 15:29:42"
+        "status": "approved",
+        "message": "number logged",
+        "timestamp": "2024-02-21 10:03:17"
     },
     {
         "phone_number": "084-326-1123",
         "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-21 15:29:53"
+        "message": "number is preapproved",
+        "timestamp": "2024-02-21 10:03:29"
+    },
+    {
+        "phone_number": "084-326-1124",
+        "status": "approved",
+        "message": "number is preapproved",
+        "timestamp": "2024-02-21 10:03:57"
     }
 ]
