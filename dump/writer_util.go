@@ -5,12 +5,12 @@ import (
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 )
 
 // Function to store a pre-approved phone number
-
 // Using locks to ensure go-routine safety
 var mutex sync.Mutex
 
@@ -25,22 +25,18 @@ func StorePreApprovedNumber(phoneNumber string) {
 
 	file, err := os.OpenFile(preApproved_Numbers, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Println("Error reading preApproved_Numbers.txt:", err)
+		log.Println("Error reading numbers.txt:", err)
 		return
 	}
 	defer file.Close()
 
 	if _, err := file.WriteString(phoneNumber + "\n"); err != nil {
-		log.Println("Error writing to preApproved_Numbers.txt:", err)
+		log.Println("Error writing to numbers.txt:", err)
 		return
 	}
 }
 
 func LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
-	//do you really need a lock here
-	// mutex.Lock()
-	// defer mutex.Unlock()
-
 	Logger(phoneNumber, message, loglevel)
 
 	filePath, exist := os.LookupEnv("LOG_FILE_PATH")
@@ -69,6 +65,7 @@ func LogToJSON(phoneNumber string, message string, status string, loglevel strin
 		PhoneNumber: phoneNumber,
 		Status:      status,
 		Message:     message,
+		Timestamp:   time.Now().Format("2006-01-02 15:04:05"),
 	})
 
 	// Rewind the file pointer to the beginning
@@ -86,6 +83,7 @@ func LogToJSON(phoneNumber string, message string, status string, loglevel strin
 	return nil
 }
 
+// Logger Log to console
 func Logger(phoneNumber string, message string, logLevel string) {
 	log.Println(logLevel + ":: " + phoneNumber + " , " + message)
 }

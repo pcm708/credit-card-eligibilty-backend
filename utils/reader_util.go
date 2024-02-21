@@ -11,10 +11,10 @@ import (
 )
 
 // ReadConfig reads configuration data from a JSON file
-func readConfigFile() (model.Config, error) {
+func readConfigFile(path string) (model.Config, error) {
 	var config model.Config
 	// Read config from file
-	configFilePath, exist := os.LookupEnv("CONFIG_PATH")
+	configFilePath, exist := os.LookupEnv(path)
 	if !exist {
 		log.Fatal("no path for config file specified")
 	}
@@ -33,8 +33,8 @@ func readConfigFile() (model.Config, error) {
 	return config, nil
 }
 
-func GetConfig() model.Config {
-	config, err := readConfigFile()
+func GetConfig(path string) model.Config {
+	config, err := readConfigFile(path)
 	if err != nil {
 		log.Fatal("error reading config file:", err)
 	}
@@ -42,8 +42,8 @@ func GetConfig() model.Config {
 }
 
 // reading
-func ReadTxtFile() ([]byte, error) {
-	filePath, exist := os.LookupEnv("PRE_APPROVED_NUMBERS_FILE_PATH")
+func ReadTxtFile(path string) ([]byte, error) {
+	filePath, exist := os.LookupEnv(path)
 	if !exist {
 		log.Fatal("no path for config file specified")
 	}

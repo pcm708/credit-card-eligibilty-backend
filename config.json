@@ -3,7 +3,5 @@
     "min_income": 100000,
     "min_number_of_credit_cards": 3,
     "desired_credit_risk": "LOW",
-    "allowed_area_codes": [0,2,5,8],
-    "approved": "approved",
-    "declined": "declined"
+    "allowed_area_codes": [0,2,5,8]
 }

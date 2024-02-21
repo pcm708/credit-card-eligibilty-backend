@@ -403,8 +403,6 @@ proguard/
 
 # Log Files
 *.log
-*log.json
-*.txt
 
 # Android Studio Navigation editor temp files
 .navigation/

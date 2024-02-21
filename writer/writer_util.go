@@ -1,20 +1,29 @@
-package utils
+package writer
 
 import (
 	"encoding/json"
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 )
 
 // Function to store a pre-approved phone number
-
 // Using locks to ensure go-routine safety
 var mutex sync.Mutex
 
-func StorePreApprovedNumber(phoneNumber string) {
+type WriterInterface interface {
+	// StorePreApprovedNumber stores a pre-approved phone number in numbers.txt
+	StorePreApprovedNumber(phoneNumber string)
+	// LogToJSON logs a message to a JSON file
+	LogToJSON(phoneNumber string, message string, status string, loglevel string) error
+}
+
+type WriterImpl struct{}
+
+func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
@@ -25,29 +34,24 @@ func StorePreApprovedNumber(phoneNumber string) {
 
 	file, err := os.OpenFile(preApproved_Numbers, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Println("Error reading preApproved_Numbers.txt:", err)
+		log.Println("Error reading numbers.txt:", err)
 		return
 	}
 	defer file.Close()
 
 	if _, err := file.WriteString(phoneNumber + "\n"); err != nil {
-		log.Println("Error writing to preApproved_Numbers.txt:", err)
+		log.Println("Error writing to numbers.txt:", err)
 		return
 	}
 }
 
-func LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
-	//do you really need a lock here
-	// mutex.Lock()
-	// defer mutex.Unlock()
-
+func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
 	Logger(phoneNumber, message, loglevel)
 
 	filePath, exist := os.LookupEnv("LOG_FILE_PATH")
 	if !exist {
 		log.Fatal("no path for config file specified")
 	}
-
 	// Open log file for appending
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
@@ -63,19 +67,16 @@ func LogToJSON(phoneNumber string, message string, status string, loglevel strin
 			return err
 		}
 	}
-
 	// Append the new log entry
 	logs = append(logs, model.LogEntry{
 		PhoneNumber: phoneNumber,
 		Status:      status,
 		Message:     message,
+		Timestamp:   time.Now().Format("2006-01-02 15:04:05"),
 	})
-
-	// Rewind the file pointer to the beginning
 	if _, err := file.Seek(0, 0); err != nil {
 		return err
 	}
-
 	// Encode the logs to JSON and write to the file
 	encoder := json.NewEncoder(file)
 	encoder.SetIndent("", "    ")
@@ -86,6 +87,7 @@ func LogToJSON(phoneNumber string, message string, status string, loglevel strin
 	return nil
 }
 
+// Logger Log to console
 func Logger(phoneNumber string, message string, logLevel string) {
 	log.Println(logLevel + ":: " + phoneNumber + " , " + message)
 }

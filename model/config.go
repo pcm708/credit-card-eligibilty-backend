@@ -7,6 +7,4 @@ type Config struct {
 	MinIncome              int    `json:"min_income"`
 	MinNumberOfCC          int    `json:"min_number_of_credit_cards"`
 	DesiredCreditRiskScore string `json:"desired_credit_risk"`
-	Approved               string `json:"approved"`
-	Declined               string `json:"declined"`
 }
