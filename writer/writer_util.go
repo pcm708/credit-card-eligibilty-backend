@@ -2,6 +2,7 @@ package writer
 
 import (
 	"encoding/json"
+	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"log"
 	"os"
 	"sync"
@@ -27,7 +28,7 @@ func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	preApproved_Numbers, exist := os.LookupEnv("PRE_APPROVED_NUMBERS_FILE_PATH")
+	preApproved_Numbers, exist := os.LookupEnv(NUMBERS_FILE)
 	if !exist {
 		log.Fatal("no path for config file specified")
 	}
@@ -48,7 +49,7 @@ func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) {
 func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
 	Logger(phoneNumber, message, loglevel)
 
-	filePath, exist := os.LookupEnv("LOG_FILE_PATH")
+	filePath, exist := os.LookupEnv(LOG_FILE_PATH)
 	if !exist {
 		log.Fatal("no path for config file specified")
 	}

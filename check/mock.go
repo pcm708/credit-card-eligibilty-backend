@@ -6,18 +6,18 @@ import (
 	"strconv"
 )
 
-type MockCheck struct {
+type MockCheckImpl struct {
 	mock.Mock
 }
 
 // IsNumberPreApproved is a mock function for the IsNumberPreApproved function in the CheckInterface.
-func (m *MockCheck) IsNumberPreApproved(data model.RecordData) bool {
+func (m *MockCheckImpl) IsNumberPreApproved(data model.RecordData) bool {
 	args := m.Called(data)
 	return args.Bool(0)
 }
 
 // IfApplicantPoliticallyExposed is a mock function for the IfApplicantPoliticallyExposed function in the CheckInterface.
-func (m *MockCheck) IfApplicantPoliticallyExposed(data model.RecordData) bool {
+func (m *MockCheckImpl) IfApplicantPoliticallyExposed(data model.RecordData) bool {
 	if data.PoliticallyExposed != nil && *data.PoliticallyExposed {
 		return true
 	}
@@ -25,7 +25,7 @@ func (m *MockCheck) IfApplicantPoliticallyExposed(data model.RecordData) bool {
 }
 
 // IfValidAge is a mock function for the IfValidAge function in the CheckInterface.
-func (m *MockCheck) IfValidAge(data model.RecordData, config model.Config) bool {
+func (m *MockCheckImpl) IfValidAge(data model.RecordData, config model.Config) bool {
 	if data.Age >= config.MinAge {
 		return true
 	}
@@ -33,7 +33,7 @@ func (m *MockCheck) IfValidAge(data model.RecordData, config model.Config) bool 
 }
 
 // IfValidIncome is a mock function for the IfValidIncome function in the CheckInterface.
-func (m *MockCheck) IfValidIncome(data model.RecordData, config model.Config) bool {
+func (m *MockCheckImpl) IfValidIncome(data model.RecordData, config model.Config) bool {
 	if data.Income >= config.MinIncome {
 		return true
 	}
@@ -41,7 +41,7 @@ func (m *MockCheck) IfValidIncome(data model.RecordData, config model.Config) bo
 }
 
 // IfValidNumberOfCreditCards is a mock function for the IfValidNumberOfCreditCards function in the CheckInterface.
-func (m *MockCheck) IfValidNumberOfCreditCards(data model.RecordData, config model.Config) bool {
+func (m *MockCheckImpl) IfValidNumberOfCreditCards(data model.RecordData, config model.Config) bool {
 	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= config.MinNumberOfCC {
 		return true
 	}
@@ -49,7 +49,7 @@ func (m *MockCheck) IfValidNumberOfCreditCards(data model.RecordData, config mod
 }
 
 // IsValidAreaCode is a mock function for the IsValidAreaCode function in the CheckInterface.
-func (m *MockCheck) IsValidAreaCode(data model.RecordData, config model.Config) bool {
+func (m *MockCheckImpl) IsValidAreaCode(data model.RecordData, config model.Config) bool {
 	areaCodeStr := string(data.PhoneNumber[0])
 	areaCode, err := strconv.Atoi(areaCodeStr)
 	if err != nil {
@@ -64,7 +64,7 @@ func (m *MockCheck) IsValidAreaCode(data model.RecordData, config model.Config) 
 }
 
 // IfCreditRiskScoreLow is a mock function for the IfCreditRiskScoreLow function in the CheckInterface.
-func (m *MockCheck) IfCreditRiskScoreLow(data model.RecordData, config model.Config) bool {
+func (m *MockCheckImpl) IfCreditRiskScoreLow(data model.RecordData, config model.Config) bool {
 	if data.NumberOfCreditCards != nil &&
 		config.DesiredCreditRiskScore == "LOW" {
 		return true

@@ -14,18 +14,17 @@ var Writer writer.WriterInterface = &writer.WriterImpl{}
 
 // DecisionEngine is the main function that decides if an applicant is eligible or not.
 // It takes in a RecordData object and returns a string indicating the decision.
-
 func DecisionEngine(data model.RecordData) string {
-	if Check.IsNumberPreApproved(data) {
-		// If the number is pre-approved, log the phone number and return "APPROVED".
-		Writer.LogToJSON(data.PhoneNumber, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)
-		return APPROVED
-	}
 	// If the number is not pre-approved, check if the applicant is eligible.
 	return isApplicantEligible(data)
 }
 
 func isApplicantEligible(data model.RecordData) string {
+	// If the number is pre-approved, log the phone number and return "APPROVED".
+	if Check.IsNumberPreApproved(data) {
+		return APPROVED
+	}
+
 	config := Reader.GetConfig(CONFIG_FILE)
 
 	if !Check.IfApplicantPoliticallyExposed(data) &&

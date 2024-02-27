@@ -6,12 +6,12 @@ import (
 )
 
 // MockReader is a mock struct for the ReaderInterface.
-type MockReader struct {
+type MockReaderImpl struct {
 	mock.Mock
 }
 
 // GetConfig is a mock function for the GetConfig function in the ReaderInterface.
-func (m *MockReader) GetConfig(configFile string) model.Config {
+func (m *MockReaderImpl) GetConfig(configFile string) model.Config {
 	args := m.Called(configFile)
 	return args.Get(0).(model.Config)
 }

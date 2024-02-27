@@ -1,11 +1,12 @@
 package check
 
 import (
+	"strconv"
+
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"github.com/honestbank/tech-assignment-backend-engineer/reader"
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
-	"strconv"
 )
 
 type CheckInterface interface {
@@ -45,6 +46,7 @@ func (c *CheckImpl) IsNumberPreApproved(data model.RecordData) bool {
 	preApprovedNumbers, _ := reader.ExtractPreApprovedNumbers()
 	for _, number := range preApprovedNumbers {
 		if number == data.PhoneNumber {
+			Writer.LogToJSON(data.PhoneNumber, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)
 			return true
 		}
 	}

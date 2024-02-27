@@ -18,10 +18,11 @@ var LOG_LEVEL_WARN string = "[WARNING]"
 
 // file paths
 var CONFIG_FILE string = "CONFIG_PATH"
-var NUMBERS_FILE string = "PRE_APPROVED_NUMBERS_FILE_PATH"
+var NUMBERS_FILE string = "APPROVED_NUMBERS_FILE_PATH"
+var LOG_FILE_PATH string = "LOG_FILE_PATH"
 
 // validator constants
-var NO_FIELDS_BLANK string = "no fields should be blank"
+var NO_FIELDS_BLANK string = "please check the input fields"
 var INCOME_NEGATIVE string = "income cannot be negative"
 var CC_NEGATIVE string = "number of credit cards cannot be negative"
 var AGE_NEGATIVE string = "age cannot be negative"

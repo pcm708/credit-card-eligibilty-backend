@@ -6,7 +6,7 @@ type JSONResponse struct {
 }
 
 // JsonFor4XX represents the structure of the JSON response for 4XX errors
-type JsonFor4XX struct {
+type JsonError struct {
 	Success bool   `json:"success"`
 	Message string `json:"message,omitempty"`
 }

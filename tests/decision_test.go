@@ -14,8 +14,8 @@ import (
 )
 
 func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
-	mockCheck := new(check.MockCheck)
-	mockReader := new(reader.MockReader)
+	mockCheck := new(check.MockCheckImpl)
+	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
 	services.Check = mockCheck
 	services.Reader = mockReader
@@ -143,8 +143,8 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 }
 
 func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
-	mockCheck := new(check.MockCheck)
-	mockReader := new(reader.MockReader)
+	mockCheck := new(check.MockCheckImpl)
+	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
 	services.Check = mockCheck
 	services.Reader = mockReader
