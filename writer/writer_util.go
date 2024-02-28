@@ -2,6 +2,7 @@ package writer
 
 import (
 	"encoding/json"
+	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"log"
 	"os"
@@ -16,7 +17,7 @@ import (
 var mutex sync.Mutex
 
 type WriterInterface interface {
-	// StorePreApprovedNumber stores a pre-approved phone number in numbers.txt
+	// StorePreApprovedNumber stores a pre-approved phone number in numbers.txt on a server or local
 	StorePreApprovedNumber(phoneNumber string)
 	// LogToJSON logs a message to a JSON file
 	LogToJSON(phoneNumber string, message string, status string, loglevel string) error
@@ -25,6 +26,25 @@ type WriterInterface interface {
 type WriterImpl struct{}
 
 func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) {
+	storePreApprovedNumber_Cloud(phoneNumber)
+	//storePreApprovedNumber_Local(phoneNumber)
+}
+
+// StorePreApprovedNumber stores a pre-approved phone number into the cloud server
+func storePreApprovedNumber_Cloud(phoneNumber string) {
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	err := cloud.StoreNewNumber(phoneNumber)
+	if err != nil {
+		Logger(phoneNumber, "error storing the number", LOG_LEVEL_ERROR)
+	} else {
+		Logger(phoneNumber, "write successful on cloud", LOG_LEVEL_INFO)
+	}
+}
+
+// StorePreApprovedNumber_Local stores a pre-approved phone number in numbers.txt
+func storePreApprovedNumber_Local(phoneNumber string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 

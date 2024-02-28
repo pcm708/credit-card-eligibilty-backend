@@ -2,6 +2,10 @@ package tests
 
 import (
 	"encoding/json"
+	"os"
+	"strconv"
+	"testing"
+
 	"github.com/honestbank/tech-assignment-backend-engineer/check"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
@@ -10,9 +14,6 @@ import (
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"os"
-	"strconv"
-	"testing"
 )
 
 func TestDecisionEngineWithJsonRecords(t *testing.T) {

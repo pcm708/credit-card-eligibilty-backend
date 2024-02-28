@@ -1,9 +1,10 @@
 package validator
 
 import (
+	"regexp"
+
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
-	"regexp"
 )
 
 // ValidateRecordData validates the data in a RecordData object.

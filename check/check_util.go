@@ -44,6 +44,7 @@ type CheckImpl struct{}
 
 func (c *CheckImpl) IsNumberPreApproved(data model.RecordData) bool {
 	preApprovedNumbers, _ := reader.ExtractPreApprovedNumbers()
+	//preApprovedNumbers, _ := reader.ExtractPreApprovedNumbers_Local()
 	for _, number := range preApprovedNumbers {
 		if number == data.PhoneNumber {
 			Writer.LogToJSON(data.PhoneNumber, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)

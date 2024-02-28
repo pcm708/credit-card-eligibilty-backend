@@ -3,13 +3,14 @@ package reader
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	"io/ioutil"
-
-	"log"
-	"os"
 	"strings"
 
-	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"log"
+	"os"
+
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 )
 
@@ -73,9 +74,22 @@ func ReadTxtFile(path string) ([]byte, error) {
 	return content, nil
 }
 
-// ExtractPreApprovedNumbers extracts the pre-approved numbers from the numbers file.
+// ExtractPreApprovedNumbers extracts the pre-approved numbers from the server.
 func ExtractPreApprovedNumbers() ([]string, error) {
-	content, err := ReadTxtFile(NUMBERS_FILE)
+	content, err := cloud.GetDataFromServer()
+	if err != nil {
+		return nil, fmt.Errorf("failed to read numbers file: %w", err)
+	}
+	var numbers []string
+	if err := json.Unmarshal(content, &numbers); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal JSON response: %w", err)
+	}
+	return numbers, nil
+}
+
+// ExtractPreApprovedNumbers_Local extracts the pre-approved numbers from the local.
+func ExtractPreApprovedNumbers_Local() ([]string, error) {
+	content, err := ReadTxtFile(constants.NUMBERS_FILE)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read numbers file: %w", err)
 	}

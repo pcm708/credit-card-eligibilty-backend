@@ -31,3 +31,7 @@ var INVALID_PHONE string = "phone number is not valid"
 // json record location
 var JSON_RECORDS_5 string = ".././5-records.json"
 var JSON_RECORDS_1000 string = ".././1000-records.json"
+
+// server properties
+var SERVER_BASE_URL string = "http://192.168.1.107"
+var SERVER_PORT string = "8080"
