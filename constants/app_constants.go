@@ -9,12 +9,12 @@ var POLITICALLY_EXPOSED string = "applicant is politically exposed"
 var PREAPPROVED_NUMBER string = "number is preapproved"
 var APPROVED string = "approved"
 var DECLINED string = "declined"
-var NUMBER_LOGGED string = "number logged"
+var NUMBER_LOGGED string = "phone number stored in logs"
 
 // constants for logging
-var LOG_LEVEL_INFO string = "[INFO]   "
-var LOG_LEVEL_ERROR string = "[ERROR]  "
-var LOG_LEVEL_WARN string = "[WARNING]"
+var LOG_LEVEL_INFO string = "[INFO]    :: "
+var LOG_LEVEL_ERROR string = "[ERROR]   :: "
+var LOG_LEVEL_WARN string = "[WARNING] :: "
 
 // file paths
 var CONFIG_FILE string = "CONFIG_PATH"
@@ -35,3 +35,4 @@ var JSON_RECORDS_1000 string = ".././1000-records.json"
 // server properties
 var SERVER_BASE_URL string = "http://192.168.1.107"
 var SERVER_PORT string = "8080"
+var CLOUD_TIMEOUT int = 5

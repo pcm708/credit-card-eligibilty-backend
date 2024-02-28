@@ -43,7 +43,7 @@ var Writer writer.WriterInterface = &writer.WriterImpl{}
 type CheckImpl struct{}
 
 func (c *CheckImpl) IsNumberPreApproved(data model.RecordData) bool {
-	preApprovedNumbers, _ := reader.ExtractPreApprovedNumbers()
+	preApprovedNumbers, _ := reader.ExtractPreApprovedNumbers_Cloud()
 	//preApprovedNumbers, _ := reader.ExtractPreApprovedNumbers_Local()
 	for _, number := range preApprovedNumbers {
 		if number == data.PhoneNumber {

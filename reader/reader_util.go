@@ -74,13 +74,21 @@ func ReadTxtFile(path string) ([]byte, error) {
 	return content, nil
 }
 
-// ExtractPreApprovedNumbers extracts the pre-approved numbers from the server.
-func ExtractPreApprovedNumbers() ([]string, error) {
+func ExtractPreApprovedNumbers_Cloud() ([]string, error) {
 	content, err := cloud.GetDataFromServer()
-	if err != nil {
-		return nil, fmt.Errorf("failed to read numbers file: %w", err)
-	}
 	var numbers []string
+
+	// If the request timed out, log a warning and return an empty list
+	if err != nil {
+		log.Println(constants.LOG_LEVEL_WARN, "cloud server failed to respond. initiating fallback... returning numbers empty list.")
+		return []string{}, nil
+	}
+
+	// For other errors, return the error
+	if err != nil {
+		return nil, err
+	}
+
 	if err := json.Unmarshal(content, &numbers); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal JSON response: %w", err)
 	}

@@ -35,6 +35,7 @@ func ProcessData(resp http.ResponseWriter, req *http.Request) {
 		resp.Header().Set("Content-Type", "application/json")
 		resp.WriteHeader(http.StatusOK)
 		json.NewEncoder(resp).Encode(model.JSONResponse{Status: status})
+		return
 	default:
 		log.Println("error no 404")
 		resp.WriteHeader(http.StatusNotFound)
@@ -50,20 +51,20 @@ func processRequestBody(req *http.Request) (model.RecordData, error) {
 
 	bodyBytes, err := io.ReadAll(req.Body)
 	if err != nil {
-		log.Println(constants.LOG_LEVEL_ERROR + ":: error reading request body: " + err.Error())
+		log.Println(constants.LOG_LEVEL_ERROR + "error reading request body: " + err.Error())
 		return data, err
 	}
 
 	req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 	err = json.NewDecoder(req.Body).Decode(&data)
 	if err != nil {
-		log.Println(constants.LOG_LEVEL_ERROR+":: error decoding request body: ", string(bodyBytes), " Error: ", err.Error())
+		log.Println(constants.LOG_LEVEL_ERROR+"error decoding request body: ", string(bodyBytes), " Error: ", err.Error())
 		return data, err
 	}
 
 	vErr := validator.ValidateRecordData(data)
 	if vErr != "" {
-		log.Println(constants.LOG_LEVEL_ERROR + ":: error validating request body: " + vErr)
+		log.Println(constants.LOG_LEVEL_ERROR + "error validating request body: " + vErr)
 		return data, errors.New(vErr)
 	}
 

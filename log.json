@@ -1,182 +1,116 @@
 [
     {
-        "phone_number": "223-326-9779",
+        "phone_number": "223-326-0018",
         "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:04"
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 19:10:42"
     },
     {
-        "phone_number": "223-326-9779",
+        "phone_number": "223-326-0018",
         "status": "approved",
-        "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:18:06"
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 19:10:54"
     },
     {
-        "phone_number": "223-326-9771",
+        "phone_number": "223-326-0018",
         "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:10"
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 19:11:26"
     },
     {
-        "phone_number": "223-326-9772",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:11"
+        "phone_number": "223-326-0018",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-02-28 19:11:32"
     },
     {
-        "phone_number": "223-326-9773",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:12"
-    },
-    {
-        "phone_number": "223-326-9774",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:14"
-    },
-    {
-        "phone_number": "223-326-9775",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:15"
-    },
-    {
-        "phone_number": "223-326-9776",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:16"
-    },
-    {
-        "phone_number": "223-326-9777",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:18:48"
-    },
-    {
-        "phone_number": "223-326-9777",
+        "phone_number": "223-326-0018",
         "status": "approved",
         "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:18:52"
+        "timestamp": "2024-02-28 19:11:47"
     },
     {
-        "phone_number": "223-326-9777",
+        "phone_number": "223-326-0017",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-02-28 19:12:01"
+    },
+    {
+        "phone_number": "223-326-0017",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 19:12:08"
+    },
+    {
+        "phone_number": "223-326-0017",
         "status": "approved",
         "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:19:17"
+        "timestamp": "2024-02-28 19:18:36"
     },
     {
-        "phone_number": "223-326-9779",
+        "phone_number": "223-326-0017",
         "status": "approved",
         "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:19:24"
+        "timestamp": "2024-02-28 19:18:47"
     },
     {
-        "phone_number": "223-326-9778",
+        "phone_number": "223-326-0018",
+        "status": "approved",
+        "message": "number is preapproved",
+        "timestamp": "2024-02-28 19:19:01"
+    },
+    {
+        "phone_number": "223-326-0018",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 19:19:29"
+    },
+    {
+        "phone_number": "223-326-0019",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 13:51:24"
+    },
+    {
+        "phone_number": "223-326-0020",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 13:51:34"
+    },
+    {
+        "phone_number": "223-326-0020",
+        "status": "approved",
+        "message": "number is preapproved",
+        "timestamp": "2024-02-28 13:51:39"
+    },
+    {
+        "phone_number": "223-326-0021",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-02-28 13:52:01"
+    },
+    {
+        "phone_number": "223-326-0021",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-28 13:52:06"
+    },
+    {
+        "phone_number": "223-326-0021",
+        "status": "approved",
+        "message": "number is preapproved",
+        "timestamp": "2024-02-28 13:52:16"
+    },
+    {
+        "phone_number": "223-326-0021",
         "status": "declined",
         "message": "number of credit cards are not valid",
-        "timestamp": "2024-02-28 15:19:35"
+        "timestamp": "2024-02-28 13:52:32"
     },
     {
-        "phone_number": "223-326-9780",
+        "phone_number": "223-326-0021",
         "status": "declined",
         "message": "number of credit cards are not valid",
-        "timestamp": "2024-02-28 15:21:40"
-    },
-    {
-        "phone_number": "223-326-9780",
-        "status": "declined",
-        "message": "number of credit cards are not valid",
-        "timestamp": "2024-02-28 15:26:13"
-    },
-    {
-        "phone_number": "223-326-9780",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:27:22"
-    },
-    {
-        "phone_number": "223-326-9780",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:30:14"
-    },
-    {
-        "phone_number": "223-326-9780",
-        "status": "approved",
-        "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:31:22"
-    },
-    {
-        "phone_number": "223-326-9781",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:31:27"
-    },
-    {
-        "phone_number": "223-326-9782",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:31:31"
-    },
-    {
-        "phone_number": "223-326-9783",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:32:07"
-    },
-    {
-        "phone_number": "223-326-9783",
-        "status": "approved",
-        "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:32:45"
-    },
-    {
-        "phone_number": "223-326-9782",
-        "status": "approved",
-        "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:32:52"
-    },
-    {
-        "phone_number": "223-326-9784",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:32:57"
-    },
-    {
-        "phone_number": "223-326-9785",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:33:03"
-    },
-    {
-        "phone_number": "223-326-9785",
-        "status": "approved",
-        "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:34:09"
-    },
-    {
-        "phone_number": "223-326-9786",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:34:14"
-    },
-    {
-        "phone_number": "223-326-9787",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:34:45"
-    },
-    {
-        "phone_number": "223-326-9787",
-        "status": "approved",
-        "message": "number is preapproved",
-        "timestamp": "2024-02-28 15:34:51"
-    },
-    {
-        "phone_number": "223-326-9788",
-        "status": "approved",
-        "message": "number logged",
-        "timestamp": "2024-02-28 15:34:56"
+        "timestamp": "2024-02-28 13:52:38"
     }
 ]

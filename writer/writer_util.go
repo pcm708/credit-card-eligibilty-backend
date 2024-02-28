@@ -34,13 +34,7 @@ func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) {
 func storePreApprovedNumber_Cloud(phoneNumber string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-
-	err := cloud.StoreNewNumber(phoneNumber)
-	if err != nil {
-		Logger(phoneNumber, "error storing the number", LOG_LEVEL_ERROR)
-	} else {
-		Logger(phoneNumber, "write successful on cloud", LOG_LEVEL_INFO)
-	}
+	cloud.StoreNewNumber(phoneNumber)
 }
 
 // StorePreApprovedNumber_Local stores a pre-approved phone number in numbers.txt
@@ -110,5 +104,5 @@ func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string
 
 // Logger Log to console
 func Logger(phoneNumber string, message string, logLevel string) {
-	log.Println(logLevel + ":: " + phoneNumber + " , " + message)
+	log.Println(logLevel + phoneNumber + " , " + message)
 }
