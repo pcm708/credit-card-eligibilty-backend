@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	"io/ioutil"
+	"net/http"
 	"strings"
 
 	"github.com/honestbank/tech-assignment-backend-engineer/constants"
@@ -74,35 +75,30 @@ func ReadTxtFile(path string) ([]byte, error) {
 	return content, nil
 }
 
-func ExtractPreApprovedNumbers_Cloud() ([]string, error) {
-	content, err := cloud.GetDataFromServer()
+func ExtractPreApprovedNumbers_Cloud() ([]string, int, error) {
+	content, statusCode, err := cloud.GetDataFromServer()
 	var numbers []string
 
 	// If the request timed out, log a warning and return an empty list
 	if err != nil {
-		log.Println(constants.LOG_LEVEL_WARN, "cloud server failed to respond. initiating fallback... returning numbers empty list.")
-		return []string{}, nil
-	}
-
-	// For other errors, return the error
-	if err != nil {
-		return nil, err
+		log.Println(constants.LOG_LEVEL_WARN, err.Error())
+		return []string{}, statusCode, err
 	}
 
 	if err := json.Unmarshal(content, &numbers); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal JSON response: %w", err)
+		return nil, http.StatusInternalServerError, fmt.Errorf("failed to unmarshal JSON response: %w", err)
 	}
-	return numbers, nil
+	return numbers, statusCode, nil
 }
 
 // ExtractPreApprovedNumbers_Local extracts the pre-approved numbers from the local.
-func ExtractPreApprovedNumbers_Local() ([]string, error) {
+func ExtractPreApprovedNumbers_Local() ([]string, int, error) {
 	content, err := ReadTxtFile(constants.NUMBERS_FILE)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read numbers file: %w", err)
+		return nil, http.StatusInternalServerError, fmt.Errorf("failed to read numbers file: %w", err)
 	}
 	lines := strings.Split(string(content), "\n")
 	var preApprovedNumbers []string
 	preApprovedNumbers = append(preApprovedNumbers, lines...)
-	return preApprovedNumbers, nil
+	return preApprovedNumbers, http.StatusOK, nil
 }

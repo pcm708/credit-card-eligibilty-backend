@@ -6,7 +6,7 @@ var INVALID_AGE string = "age is not valid"
 var INVALID_INCOME string = "income is not valid"
 var INVALID_CREDIT_RISK_SCORE string = "credit risk score is not low"
 var POLITICALLY_EXPOSED string = "applicant is politically exposed"
-var PREAPPROVED_NUMBER string = "number is preapproved"
+var PREAPPROVED_NUMBER string = "number pre-approved"
 var APPROVED string = "approved"
 var DECLINED string = "declined"
 var NUMBER_LOGGED string = "phone number stored in logs"
@@ -35,4 +35,4 @@ var JSON_RECORDS_1000 string = ".././1000-records.json"
 // server properties
 var SERVER_BASE_URL string = "http://192.168.1.107"
 var SERVER_PORT string = "8080"
-var CLOUD_TIMEOUT int = 5
+var CLOUD_TIMEOUT int = 10

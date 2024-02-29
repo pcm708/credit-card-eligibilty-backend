@@ -20,7 +20,7 @@ func TestDecisionEngineWithJsonRecords(t *testing.T) {
 	mockCheck := new(check.MockCheckImpl)
 	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
-	services.Check = mockCheck
+	//services.Check = mockCheck
 	services.Reader = mockReader
 	services.Writer = mockWriter
 	mockCheck.On("IsNumberPreApproved", mock.Anything).Return(false)
@@ -53,7 +53,7 @@ func TestDecisionEngineWithJsonRecords(t *testing.T) {
 			//politicallyExposed := false
 			dummyData := data
 
-			result := services.DecisionEngine(dummyData)
+			result, _, _ := services.DecisionEngine(dummyData)
 			assert.Equal(t, DECLINED, result)
 		})
 	}

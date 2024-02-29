@@ -30,11 +30,18 @@ func ProcessData(resp http.ResponseWriter, req *http.Request) {
 		}
 
 		// Performing the decision logic here
-		status := services.DecisionEngine(data)
+		res, statusCode, err := services.DecisionEngine(data)
 		// Return the response
+		if err != nil {
+			resp.Header().Set("Content-Type", "application/json")
+			resp.WriteHeader(statusCode)
+			json.NewEncoder(resp).Encode(model.JsonError{Success: false, Message: err.Error()})
+			return
+		}
+
 		resp.Header().Set("Content-Type", "application/json")
 		resp.WriteHeader(http.StatusOK)
-		json.NewEncoder(resp).Encode(model.JSONResponse{Status: status})
+		json.NewEncoder(resp).Encode(model.JSONResponse{Status: res})
 		return
 	default:
 		log.Println("error no 404")
@@ -58,13 +65,13 @@ func processRequestBody(req *http.Request) (model.RecordData, error) {
 	req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 	err = json.NewDecoder(req.Body).Decode(&data)
 	if err != nil {
-		log.Println(constants.LOG_LEVEL_ERROR+"error decoding request body: ", string(bodyBytes), " Error: ", err.Error())
+		log.Println(constants.LOG_LEVEL_ERROR+"error decoding request body: ", err.Error(), "\n", string(bodyBytes))
 		return data, err
 	}
 
 	vErr := validator.ValidateRecordData(data)
 	if vErr != "" {
-		log.Println(constants.LOG_LEVEL_ERROR + "error validating request body: " + vErr)
+		log.Println(constants.LOG_LEVEL_ERROR + "error validating request body: " + vErr + "\n" + string(bodyBytes))
 		return data, errors.New(vErr)
 	}
 

@@ -11,9 +11,9 @@ type MockCheckImpl struct {
 }
 
 // IsNumberPreApproved is a mock function for the IsNumberPreApproved function in the CheckInterface.
-func (m *MockCheckImpl) IsNumberPreApproved(data model.RecordData) bool {
+func (m *MockCheckImpl) IsNumberPreApproved(data model.RecordData) (bool, error) {
 	args := m.Called(data)
-	return args.Bool(0)
+	return args.Bool(0), args.Error(1)
 }
 
 // IfApplicantPoliticallyExposed is a mock function for the IfApplicantPoliticallyExposed function in the CheckInterface.

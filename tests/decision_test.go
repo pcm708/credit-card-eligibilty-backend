@@ -1,8 +1,6 @@
 package tests
 
 import (
-	"testing"
-
 	"github.com/honestbank/tech-assignment-backend-engineer/check"
 	"github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
@@ -11,16 +9,17 @@ import (
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"net/http"
+	"testing"
 )
 
 func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 	mockCheck := new(check.MockCheckImpl)
 	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
-	services.Check = mockCheck
 	services.Reader = mockReader
 	services.Writer = mockWriter
-	mockCheck.On("IsNumberPreApproved", mock.Anything).Return(false)
+	mockCheck.On("Check", mock.Anything, mock.Anything).Return(false, http.StatusOK, nil)
 	mockReader.On("GetConfig", mock.Anything).Return(model.Config{
 		MinAge:                 18,
 		MinIncome:              100000,
@@ -41,7 +40,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.DECLINED, result)
 	})
 
@@ -57,7 +56,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.DECLINED, result)
 	})
 
@@ -73,7 +72,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.DECLINED, result)
 	})
 
@@ -89,7 +88,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.DECLINED, result)
 	})
 
@@ -105,7 +104,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.DECLINED, result)
 	})
 
@@ -121,7 +120,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.DECLINED, result)
 	})
 
@@ -137,7 +136,7 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 }
@@ -146,7 +145,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 	mockCheck := new(check.MockCheckImpl)
 	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
-	services.Check = mockCheck
+	//services.Check = mockCheck
 	services.Reader = mockReader
 	services.Writer = mockWriter
 
@@ -171,7 +170,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 
@@ -187,7 +186,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 
@@ -203,7 +202,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 
@@ -218,7 +217,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 
@@ -233,7 +232,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 
@@ -248,7 +247,7 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 			PoliticallyExposed:  &politicallyExposed,
 		}
 
-		result := services.DecisionEngine(dummyData)
+		result, _, _ := services.DecisionEngine(dummyData)
 		assert.Equal(t, constants.APPROVED, result)
 	})
 }
