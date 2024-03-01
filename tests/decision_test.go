@@ -9,17 +9,14 @@ import (
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"net/http"
 	"testing"
 )
 
 func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
-	mockCheck := new(check.MockCheckImpl)
+	mockCheck := new(check.MockCheck)
 	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
-	services.Reader = mockReader
-	services.Writer = mockWriter
-	mockCheck.On("Check", mock.Anything, mock.Anything).Return(false, http.StatusOK, nil)
+
 	mockReader.On("GetConfig", mock.Anything).Return(model.Config{
 		MinAge:                 18,
 		MinIncome:              100000,
@@ -27,6 +24,13 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 		AllowedAreaCodes:       []int{0, 2, 5, 8},
 		DesiredCreditRiskScore: "LOW",
 	})
+	mockWriter.On("LogToJSON", mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+	mockWriter.On("StorePreApprovedNumber", mock.Anything)
+
+	services.IsNumberPreApproved = mockCheck
+	services.Eligibility = mockCheck
+	services.Reader = mockReader
+	services.Writer = mockWriter
 
 	t.Run("ShouldDeclineTheApplicant_IfApplicantAgeIsLessThan18Years", func(t *testing.T) {
 		numberOfCreditCards := 3
@@ -142,14 +146,10 @@ func TestDecisionEngineWhenNumberIsNotPreApproved(t *testing.T) {
 }
 
 func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
-	mockCheck := new(check.MockCheckImpl)
+	mockCheck := new(check.MockCheck)
 	mockReader := new(reader.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
-	//services.Check = mockCheck
-	services.Reader = mockReader
-	services.Writer = mockWriter
 
-	mockCheck.On("IsNumberPreApproved", mock.Anything).Return(true)
 	mockReader.On("GetConfig", mock.Anything).Return(model.Config{
 		MinAge:                 18,
 		MinIncome:              100000,
@@ -157,6 +157,14 @@ func TestDecisionEngineWhenNumberIsPreApproved(t *testing.T) {
 		AllowedAreaCodes:       []int{0, 2, 5, 8},
 		DesiredCreditRiskScore: "LOW",
 	})
+	mockCheck.On("IsNumberPreApproved", mock.Anything, mock.Anything).Return(true, 0, nil)
+	mockWriter.On("LogToJSON", mock.Anything, mock.Anything, mock.Anything, mock.Anything)
+	mockWriter.On("StorePreApprovedNumber", mock.Anything)
+
+	services.IsNumberPreApproved = mockCheck
+	services.Eligibility = mockCheck
+	services.Reader = mockReader
+	services.Writer = mockWriter
 
 	t.Run("ShouldApproveTheApplicant_IfPhoneNumberIsPreApproved", func(t *testing.T) {
 		numberOfCreditCards := 3

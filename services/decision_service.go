@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+var Eligibility check.CheckInterface = check.CreateChecks()
+var IsNumberPreApproved = check.IsNumberPreApprovedCheck()
 var Reader reader.ReaderInterface = &reader.ReaderImpl{}
 var Writer writer.WriterInterface = &writer.WriterImpl{}
 
@@ -22,8 +24,7 @@ func DecisionEngine(data model.RecordData) (string, int, error) {
 func isApplicantEligible(data model.RecordData) (string, int, error) {
 	config := Reader.GetConfig(CONFIG_FILE)
 
-	// Create an instance of NumberPreApprovedCheck and perform the check on the phone number
-	if ok, res, err := check.IsNumberPreApprovedCheck().Check(data, config); ok {
+	if ok, res, err := IsNumberPreApproved.Check(data, config); ok {
 		// if number is pre-approved, log and return
 		Writer.LogToJSON(data.PhoneNumber, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)
 		return APPROVED, res, nil
@@ -32,9 +33,8 @@ func isApplicantEligible(data model.RecordData) (string, int, error) {
 	}
 
 	//If number is not pre-approved, create other eligibility checks
-	checkIfEligible := check.CreateChecks()
 	// Start the checks
-	if ok, res, err := checkIfEligible.Check(data, config); !ok {
+	if ok, res, err := Eligibility.Check(data, config); !ok {
 		return DECLINED, res, err
 	}
 

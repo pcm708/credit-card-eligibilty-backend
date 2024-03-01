@@ -352,5 +352,95 @@
         "status": "declined",
         "message": "area code is not valid",
         "timestamp": "2024-02-29 14:57:11"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "declined",
+        "message": "number of credit cards are not valid",
+        "timestamp": "2024-02-29 17:30:31"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "declined",
+        "message": "income is not valid",
+        "timestamp": "2024-02-29 17:30:41"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "declined",
+        "message": "age is not valid",
+        "timestamp": "2024-02-29 17:30:52"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-02-29 17:31:04"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-02-29 17:31:22"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-02-29 17:31:25"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:33:06"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:33:08"
+    },
+    {
+        "phone_number": "023-326-0036",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:33:09"
+    },
+    {
+        "phone_number": "023-326-0032",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:33:13"
+    },
+    {
+        "phone_number": "023-326-0037",
+        "status": "approved",
+        "message": "phone number stored in logs",
+        "timestamp": "2024-03-01 12:33:24"
+    },
+    {
+        "phone_number": "023-326-0037",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:33:26"
+    },
+    {
+        "phone_number": "123-326-0037",
+        "status": "declined",
+        "message": "area code is not valid",
+        "timestamp": "2024-03-01 12:33:32"
+    },
+    {
+        "phone_number": "023-326-0037",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:34:08"
+    },
+    {
+        "phone_number": "023-326-0037",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-01 12:34:12"
     }
 ]

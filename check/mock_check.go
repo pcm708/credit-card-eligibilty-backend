@@ -3,17 +3,24 @@ package check
 import (
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"github.com/stretchr/testify/mock"
+	"net/http"
 )
 
-type MockCheckUtil struct {
+type MockCheck struct {
 	mock.Mock
 }
 
-func (m *MockCheckUtil) Check(data model.RecordData, config model.Config) (bool, int, error) {
-	args := m.Called(data, config)
-	return args.Bool(0), args.Int(1), args.Error(2)
+func (a *MockCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
+	if data.Age <= config.MinAge &&
+		*data.NumberOfCreditCards <= config.MinNumberOfCC &&
+		data.Income <= config.MinIncome &&
+		data.PoliticallyExposed != nil && *data.PoliticallyExposed == false &&
+		data.NumberOfCreditCards != nil &&
+		config.DesiredCreditRiskScore == calculateCreditRisk(data.Age, *data.NumberOfCreditCards) {
+		return true, http.StatusOK, nil
+	}
+	return false, http.StatusOK, nil
 }
 
-func (m *MockCheckUtil) SetNext(check EligibilityCheck) {
-	m.Called(check)
+func (m *MockCheck) SetNext(check CheckInterface) {
 }
