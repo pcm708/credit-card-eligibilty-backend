@@ -28,7 +28,7 @@ func ProcessRequestBody(req *http.Request) (model.RecordData, error) {
 	req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 	err = json.NewDecoder(req.Body).Decode(&data)
 	if err != nil {
-		log.Println(LOG_LEVEL_ERROR+"error decoding request body: ", err.Error(), "\n", string(bodyBytes))
+		log.Println(LOG_LEVEL_ERROR, "error decoding request body: ", err.Error(), "\n", string(bodyBytes))
 		return data, err
 	}
 

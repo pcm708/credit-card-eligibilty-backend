@@ -25,9 +25,9 @@ func ProcessData(resp http.ResponseWriter, req *http.Request) {
 		}
 
 		// Performing the decision logic here
-		result, statusCode, err := services.DecisionEngine(data)
+		result, status, err := services.DecisionEngine(data)
 		if err != nil {
-			exceptions.HandleDecisionServiceError(err, statusCode, resp)
+			exceptions.HandleDecisionServiceError(err, status, resp)
 			return
 		}
 

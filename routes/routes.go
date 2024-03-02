@@ -1,14 +1,13 @@
 package routes
 
 import (
-	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	"github.com/honestbank/tech-assignment-backend-engineer/controllers"
 	"github.com/honestbank/tech-assignment-backend-engineer/middleware"
 	"net/http"
 	"time"
 )
 
-var rdb = cloud.RedisClient()
+var rdb = middleware.RedisClient()
 
 // SetupRoutes function sets up the routes for the application
 func SetupRoutes() *http.ServeMux {

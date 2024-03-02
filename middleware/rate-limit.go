@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"encoding/json"
-	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"net"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 )
 
 var ctx = context.Background()
-var rdb = cloud.RedisClient()
+var rdb = RedisClient()
 
 func NewRateLimiter(limit int, window time.Duration) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -27,7 +26,7 @@ func NewRateLimiter(limit int, window time.Duration) func(http.Handler) http.Han
 				// Create a JsonError instance
 				err := model.JsonError{
 					Success: false,
-					Message: "Error contacting redis",
+					Message: "Error contacting redis db",
 				}
 				// Convert the JsonError instance into JSON
 				errJson, _ := json.Marshal(err)

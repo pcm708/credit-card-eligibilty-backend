@@ -1,8 +1,7 @@
 package check
 
 import (
-	"fmt"
-	"github.com/honestbank/tech-assignment-backend-engineer/reader"
+	"github.com/honestbank/tech-assignment-backend-engineer/db"
 	"net/http"
 	"strconv"
 
@@ -14,7 +13,7 @@ import (
 var Writer writer.WriterInterface = &writer.WriterImpl{}
 
 type CheckInterface interface {
-	Check(data model.RecordData, config model.Config) (bool, int, error)
+	Check(data model.RecordData) (bool, int, error)
 	SetNext(check CheckInterface)
 }
 
@@ -46,24 +45,18 @@ type PoliticallyExposedCheck struct {
 	next CheckInterface
 }
 
-func (n *NumberPreApprovedCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
-	//preApprovedNumbers, code, err := reader.ExtractPreApprovedNumbers_Local()
-	preApprovedNumbers, code, err := reader.ExtractPreApprovedNumbers_Cloud()
+func (n *NumberPreApprovedCheck) Check(data model.RecordData) (bool, error) {
+	flag, err := db.CheckIfNumberPresent(data.PhoneNumber)
 	if err != nil {
-		return false, code, err
+		return false, err
 	}
-	for _, number := range preApprovedNumbers {
-		if number == data.PhoneNumber {
-			return true, code, nil
-		}
-	}
-	return false, code, nil
+	return flag, err
 }
 
-func (a *AgeCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
-	if data.Age >= config.MinAge {
+func (a *AgeCheck) Check(data model.RecordData) (bool, int, error) {
+	if data.Age >= MIN_AGE {
 		if a.next != nil {
-			return a.next.Check(data, config)
+			return a.next.Check(data)
 		}
 		return true, http.StatusOK, nil
 	}
@@ -71,17 +64,17 @@ func (a *AgeCheck) Check(data model.RecordData, config model.Config) (bool, int,
 	return false, http.StatusOK, nil
 }
 
-func (a *AreaCodeCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
+func (a *AreaCodeCheck) Check(data model.RecordData) (bool, int, error) {
 	areaCodeStr := string(data.PhoneNumber[0])
 	areaCode, err := strconv.Atoi(areaCodeStr)
 	if err != nil {
 		Writer.LogToJSON(data.PhoneNumber, INVALID_AREA_CODE, DECLINED, LOG_LEVEL_ERROR)
-		return false, http.StatusInternalServerError, fmt.Errorf("Area code check failed")
+		return false, http.StatusInternalServerError, err
 	}
-	for _, code := range config.AllowedAreaCodes {
+	for _, code := range ALLOWED_AREA_CODE {
 		if areaCode == code {
 			if a.next != nil {
-				return a.next.Check(data, config)
+				return a.next.Check(data)
 			}
 			return true, http.StatusOK, nil
 		}
@@ -90,10 +83,10 @@ func (a *AreaCodeCheck) Check(data model.RecordData, config model.Config) (bool,
 	return false, http.StatusOK, nil
 }
 
-func (n *NumberOfCreditCardsCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
-	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= config.MinNumberOfCC {
+func (n *NumberOfCreditCardsCheck) Check(data model.RecordData) (bool, int, error) {
+	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= MIN_NUMBER_OF_CC {
 		if n.next != nil {
-			return n.next.Check(data, config)
+			return n.next.Check(data)
 		}
 		return true, http.StatusOK, nil
 	}
@@ -101,10 +94,10 @@ func (n *NumberOfCreditCardsCheck) Check(data model.RecordData, config model.Con
 	return false, http.StatusOK, nil
 }
 
-func (i *IncomeCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
-	if data.Income >= config.MinIncome {
+func (i *IncomeCheck) Check(data model.RecordData) (bool, int, error) {
+	if data.Income >= MIN_INCOME {
 		if i.next != nil {
-			return i.next.Check(data, config)
+			return i.next.Check(data)
 		}
 		return true, http.StatusOK, nil
 	}
@@ -112,11 +105,11 @@ func (i *IncomeCheck) Check(data model.RecordData, config model.Config) (bool, i
 	return false, http.StatusOK, nil
 }
 
-func (c *CreditRiskScoreCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
+func (c *CreditRiskScoreCheck) Check(data model.RecordData) (bool, int, error) {
 	if data.NumberOfCreditCards != nil &&
-		config.DesiredCreditRiskScore == calculateCreditRisk(data.Age, *data.NumberOfCreditCards) {
+		DESIRED_CREDIT_RISK_SCORE == calculateCreditRisk(data.Age, *data.NumberOfCreditCards) {
 		if c.next != nil {
-			return c.next.Check(data, config)
+			return c.next.Check(data)
 		}
 		return true, http.StatusOK, nil
 	}
@@ -124,44 +117,15 @@ func (c *CreditRiskScoreCheck) Check(data model.RecordData, config model.Config)
 	return false, http.StatusOK, nil
 }
 
-func (p *PoliticallyExposedCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
+func (p *PoliticallyExposedCheck) Check(data model.RecordData) (bool, int, error) {
 	if data.PoliticallyExposed != nil && *data.PoliticallyExposed {
 		Writer.LogToJSON(data.PhoneNumber, POLITICALLY_EXPOSED, DECLINED, LOG_LEVEL_WARN)
 		return false, http.StatusOK, nil
 	}
 	if p.next != nil {
-		return p.next.Check(data, config)
+		return p.next.Check(data)
 	}
 	return true, http.StatusOK, nil
-}
-
-func (n *NumberPreApprovedCheck) SetNext(check CheckInterface) {
-	n.next = check
-}
-func (a *AgeCheck) SetNext(check CheckInterface) {
-	a.next = check
-}
-func (a *AreaCodeCheck) SetNext(check CheckInterface) {
-	a.next = check
-}
-func (n *NumberOfCreditCardsCheck) SetNext(check CheckInterface) {
-	n.next = check
-}
-func (i *IncomeCheck) SetNext(check CheckInterface) {
-	i.next = check
-}
-func (c *CreditRiskScoreCheck) SetNext(check CheckInterface) {
-	c.next = check
-}
-func (p *PoliticallyExposedCheck) SetNext(check CheckInterface) {
-	p.next = check
-}
-
-// IsNumberPreApprovedCheck returns an instance of NumberPreApprovedCheck
-func IsNumberPreApprovedCheck() CheckInterface {
-	preApprovedCheck := &NumberPreApprovedCheck{}
-	preApprovedCheck.SetNext(nil)
-	return preApprovedCheck
 }
 
 // CreateChecks creates the instances of all checks and sets up the chain of responsibility.
@@ -197,4 +161,26 @@ func calculateCreditRisk(age, numberOfCreditCard int) string {
 		return "MEDIUM"
 	}
 	return "HIGH"
+}
+
+func (n *NumberPreApprovedCheck) SetNext(check CheckInterface) {
+	n.next = check
+}
+func (a *AgeCheck) SetNext(check CheckInterface) {
+	a.next = check
+}
+func (a *AreaCodeCheck) SetNext(check CheckInterface) {
+	a.next = check
+}
+func (n *NumberOfCreditCardsCheck) SetNext(check CheckInterface) {
+	n.next = check
+}
+func (i *IncomeCheck) SetNext(check CheckInterface) {
+	i.next = check
+}
+func (c *CreditRiskScoreCheck) SetNext(check CheckInterface) {
+	c.next = check
+}
+func (p *PoliticallyExposedCheck) SetNext(check CheckInterface) {
+	p.next = check
 }

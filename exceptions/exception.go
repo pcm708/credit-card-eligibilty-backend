@@ -29,7 +29,7 @@ func HandleRedisServerError(err error) {
 	} else {
 		log.Println(constants.LOG_LEVEL_WARN + err.Error())
 	}
-	log.Print(constants.LOG_LEVEL_INFO + "Trying to fetch data from cloud")
+	log.Print(constants.LOG_LEVEL_INFO + "Trying to fetch data from db")
 }
 
 func HandleValidationOrBadJsonInputError(err error, resp http.ResponseWriter) {

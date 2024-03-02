@@ -1,5 +1,13 @@
 package constants
 
+// configs
+var MIN_AGE int = 18
+var MIN_INCOME int = 100000
+var MIN_NUMBER_OF_CC int = 3
+var ALLOWED_AREA_CODE = []int{0, 2, 5, 8}
+var DESIRED_CREDIT_RISK_SCORE string = "LOW"
+
+// constants for decision
 var INVALID_AREA_CODE string = "area code is not valid"
 var INVALID_CC_NUMBER string = "number of credit cards are not valid"
 var INVALID_AGE string = "age is not valid"
@@ -33,8 +41,9 @@ var JSON_RECORDS_5 string = ".././5-records.json"
 var JSON_RECORDS_1000 string = ".././1000-records.json"
 
 // server properties
-var SERVER_BASE_URL string = "http://192.168.1.100"
-var SERVER_PORT string = "8080"
+var LOCAL_DB_URL string = "localhost"
+var CLOUD_DB_URL string = "192.168.1.100"
+var DB_PORT string = "3306"
 var REDIS_BASE_URL string = "192.168.1.100"
 var REDIS_PORT string = "6379"
 var CLOUD_TIMEOUT int = 10

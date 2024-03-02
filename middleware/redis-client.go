@@ -1,15 +1,19 @@
-package cloud
+package middleware
 
 import (
 	"github.com/go-redis/redis/v8"
 	"github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"os"
 	"time"
 )
 
-var redisURL string = constants.REDIS_BASE_URL + ":" + constants.REDIS_PORT
-
-// Initialize a new Redis client with a custom timeout
 func RedisClient() *redis.Client {
+	var redisURL string
+	if os.Getenv("CLOUD") == "true" {
+		redisURL = constants.REDIS_BASE_URL + ":" + constants.REDIS_PORT
+	} else {
+		redisURL = "redis:" + constants.REDIS_PORT
+	}
 	return redis.NewClient(&redis.Options{
 		Addr:         redisURL,        // replace with your Redis server address
 		Password:     "",              // replace with your password if any

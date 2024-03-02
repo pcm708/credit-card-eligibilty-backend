@@ -1,4 +1,4 @@
-package reader
+package dump
 
 import (
 	"github.com/honestbank/tech-assignment-backend-engineer/model"

@@ -1,9 +1,8 @@
-package reader
+package dump
 
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	"github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/exceptions"
 	"io/ioutil"
@@ -74,8 +73,4 @@ func ExtractPreApprovedNumbers_Local() ([]string, int, error) {
 	var preApprovedNumbers []string
 	preApprovedNumbers = append(preApprovedNumbers, lines...)
 	return preApprovedNumbers, http.StatusOK, nil
-}
-
-func ExtractPreApprovedNumbers_Cloud() ([]string, int, error) {
-	return cloud.GetDataFromServer()
 }

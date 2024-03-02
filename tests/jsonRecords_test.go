@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"github.com/honestbank/tech-assignment-backend-engineer/dump"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
-	"github.com/honestbank/tech-assignment-backend-engineer/reader"
 	"github.com/honestbank/tech-assignment-backend-engineer/services"
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
 	"github.com/stretchr/testify/assert"
@@ -18,7 +18,7 @@ import (
 
 func TestDecisionEngineWithJsonRecords(t *testing.T) {
 	mockCheck := new(check.MockCheck)
-	mockReader := new(reader.MockReaderImpl)
+	mockReader := new(dump.MockReaderImpl)
 	mockWriter := new(writer.MockWriter)
 
 	mockReader.On("GetConfig", mock.Anything).Return(model.Config{
@@ -54,7 +54,7 @@ func TestDecisionEngineWithJsonRecords(t *testing.T) {
 		t.Run("TestRecord_"+strconv.Itoa(i), func(t *testing.T) {
 			dummyData := data
 
-			result, _, _ := services.DecisionEngine(dummyData)
+			result := services.DecisionEngine(dummyData)
 			assert.Equal(t, DECLINED, result)
 		})
 	}
