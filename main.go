@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/honestbank/tech-assignment-backend-engineer/db"
 	"log"
 	"net/http"
 	"os"
@@ -54,6 +55,7 @@ func run() (s *http.Server) {
 
 func main() {
 	s := run()
+	db.ConnectToDB()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit

@@ -12,7 +12,7 @@ import (
 
 var db *sql.DB
 
-func init() {
+func ConnectToDB() {
 	var err error
 	var dbURL string
 

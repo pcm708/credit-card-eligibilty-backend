@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-var EligibilityChecker = check.CreateChecks()
-var IsNumberPreApproved = &check.NumberPreApprovedCheck{}
-var Writer writer.WriterInterface = &writer.WriterImpl{}
+var IsNumberPreApproved = check.CreatePhoneNumberCheck()
+var EligibilityChecker = check.CreateEligibilityChecks()
+var Writer writer.IWriter = &writer.WriterImpl{}
 
 func DecisionEngine(data model.RecordData) (string, int, error) {
 	return isApplicantEligible(data)
@@ -18,7 +18,7 @@ func DecisionEngine(data model.RecordData) (string, int, error) {
 
 func isApplicantEligible(data model.RecordData) (string, int, error) {
 	// Check if the number is pre-approved
-	flag, err := IsNumberPreApproved.Check(data)
+	flag, _, err := IsNumberPreApproved.Check(data)
 	if err != nil {
 		return DECLINED, http.StatusServiceUnavailable, err
 	}

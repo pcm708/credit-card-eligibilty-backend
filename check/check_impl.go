@@ -10,47 +10,42 @@ import (
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
 )
 
-var Writer writer.WriterInterface = &writer.WriterImpl{}
-
-type CheckInterface interface {
-	Check(data model.RecordData) (bool, int, error)
-	SetNext(check CheckInterface)
-}
+var Writer writer.IWriter = &writer.WriterImpl{}
 
 type NumberPreApprovedCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
 type AgeCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
 type AreaCodeCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
 type IncomeCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
 type NumberOfCreditCardsCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
 type CreditRiskScoreCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
 type PoliticallyExposedCheck struct {
-	next CheckInterface
+	next ICheck
 }
 
-func (n *NumberPreApprovedCheck) Check(data model.RecordData) (bool, error) {
+func (n *NumberPreApprovedCheck) Check(data model.RecordData) (bool, int, error) {
 	flag, err := db.CheckIfNumberPresent(data.PhoneNumber)
 	if err != nil {
-		return false, err
+		return false, http.StatusServiceUnavailable, err
 	}
-	return flag, err
+	return flag, http.StatusOK, err
 }
 
 func (a *AgeCheck) Check(data model.RecordData) (bool, int, error) {
@@ -84,7 +79,7 @@ func (a *AreaCodeCheck) Check(data model.RecordData) (bool, int, error) {
 }
 
 func (n *NumberOfCreditCardsCheck) Check(data model.RecordData) (bool, int, error) {
-	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= MIN_NUMBER_OF_CC {
+	if data.NumberOfCreditCards <= MIN_NUMBER_OF_CC {
 		if n.next != nil {
 			return n.next.Check(data)
 		}
@@ -106,8 +101,7 @@ func (i *IncomeCheck) Check(data model.RecordData) (bool, int, error) {
 }
 
 func (c *CreditRiskScoreCheck) Check(data model.RecordData) (bool, int, error) {
-	if data.NumberOfCreditCards != nil &&
-		DESIRED_CREDIT_RISK_SCORE == calculateCreditRisk(data.Age, *data.NumberOfCreditCards) {
+	if DESIRED_CREDIT_RISK_SCORE == calculateCreditRisk(data.Age, data.NumberOfCreditCards) {
 		if c.next != nil {
 			return c.next.Check(data)
 		}
@@ -130,7 +124,7 @@ func (p *PoliticallyExposedCheck) Check(data model.RecordData) (bool, int, error
 
 // CreateChecks creates the instances of all checks and sets up the chain of responsibility.
 // It returns the first check in the chain
-func CreateChecks() CheckInterface {
+func CreateEligibilityChecks() ICheck {
 	// instance creation
 	ageCheck := &AgeCheck{}
 	areaCodeCheck := &AreaCodeCheck{}
@@ -150,6 +144,10 @@ func CreateChecks() CheckInterface {
 	return ageCheck
 }
 
+func CreatePhoneNumberCheck() ICheck {
+	return &NumberPreApprovedCheck{}
+}
+
 // calculateCreditRisk calculates the credit risk score based on the age and number of credit cards.
 func calculateCreditRisk(age, numberOfCreditCard int) string {
 	sum := age + numberOfCreditCard
@@ -163,24 +161,24 @@ func calculateCreditRisk(age, numberOfCreditCard int) string {
 	return "HIGH"
 }
 
-func (n *NumberPreApprovedCheck) SetNext(check CheckInterface) {
+func (n *NumberPreApprovedCheck) SetNext(check ICheck) {
 	n.next = check
 }
-func (a *AgeCheck) SetNext(check CheckInterface) {
+func (a *AgeCheck) SetNext(check ICheck) {
 	a.next = check
 }
-func (a *AreaCodeCheck) SetNext(check CheckInterface) {
+func (a *AreaCodeCheck) SetNext(check ICheck) {
 	a.next = check
 }
-func (n *NumberOfCreditCardsCheck) SetNext(check CheckInterface) {
+func (n *NumberOfCreditCardsCheck) SetNext(check ICheck) {
 	n.next = check
 }
-func (i *IncomeCheck) SetNext(check CheckInterface) {
+func (i *IncomeCheck) SetNext(check ICheck) {
 	i.next = check
 }
-func (c *CreditRiskScoreCheck) SetNext(check CheckInterface) {
+func (c *CreditRiskScoreCheck) SetNext(check ICheck) {
 	c.next = check
 }
-func (p *PoliticallyExposedCheck) SetNext(check CheckInterface) {
+func (p *PoliticallyExposedCheck) SetNext(check ICheck) {
 	p.next = check
 }

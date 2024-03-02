@@ -12,14 +12,6 @@ import (
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 )
 
-// Function to store a pre-approved phone number
-// Using locks to ensure go-routine safety
-
-type WriterInterface interface {
-	StorePreApprovedNumber(phoneNumber string) error
-	LogToJSON(phoneNumber string, message string, status string, loglevel string) error
-}
-
 type WriterImpl struct{}
 
 // StorePreApprovedNumber stores a pre-approved phone number into the db server
@@ -31,11 +23,11 @@ func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) error {
 	return nil
 }
 
+// LogToJSON logs the decision to a JSON file
 func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
-	Logger(loglevel, phoneNumber+", "+message)
+	log.Println(loglevel, phoneNumber+", "+message)
 
-	filePath, exist := os.LookupEnv(LOG_FILE_PATH)
-	exceptions.HandleFilePathError(exist, "no path for config file specified")
+	filePath := LOG_FILE_PATH
 	// Open log file for appending
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
 	exceptions.HandleOSOpenFileError(err, "Error reading numbers.txt:")
@@ -66,9 +58,4 @@ func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string
 		return err
 	}
 	return nil
-}
-
-// Logger Log to console
-func Logger(logLevel string, msg string) {
-	log.Println(logLevel + msg)
 }
