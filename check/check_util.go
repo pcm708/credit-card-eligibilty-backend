@@ -2,12 +2,12 @@ package check
 
 import (
 	"fmt"
+	"github.com/honestbank/tech-assignment-backend-engineer/reader"
 	"net/http"
 	"strconv"
 
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
-	"github.com/honestbank/tech-assignment-backend-engineer/reader"
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
 )
 
@@ -47,8 +47,8 @@ type PoliticallyExposedCheck struct {
 }
 
 func (n *NumberPreApprovedCheck) Check(data model.RecordData, config model.Config) (bool, int, error) {
-	//preApprovedNumbers, code, err := reader.ExtractPreApprovedNumbers_Cloud()
 	preApprovedNumbers, code, err := reader.ExtractPreApprovedNumbers_Local()
+	//preApprovedNumbers, code, err := reader.ExtractPreApprovedNumbers_Cloud()
 	if err != nil {
 		return false, code, err
 	}

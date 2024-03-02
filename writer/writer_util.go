@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/honestbank/tech-assignment-backend-engineer/cloud"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"github.com/honestbank/tech-assignment-backend-engineer/exceptions"
 	"log"
 	"os"
 	"sync"
@@ -18,8 +19,9 @@ var mutex sync.Mutex
 
 type WriterInterface interface {
 	// StorePreApprovedNumber stores a pre-approved phone number in numbers.txt on a server or local
-	StorePreApprovedNumber(phoneNumber string)
 	// LogToJSON logs a message to a JSON file
+
+	StorePreApprovedNumber(phoneNumber string)
 	LogToJSON(phoneNumber string, message string, status string, loglevel string) error
 }
 
@@ -43,35 +45,24 @@ func storePreApprovedNumber_Local(phoneNumber string) {
 	defer mutex.Unlock()
 
 	preApproved_Numbers, exist := os.LookupEnv(NUMBERS_FILE)
-	if !exist {
-		log.Fatal("no path for config file specified")
-	}
+	exceptions.HandleFilePathError(exist, "no path for numbers.txt specified")
 
 	file, err := os.OpenFile(preApproved_Numbers, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Println("Error reading numbers.txt:", err)
-		return
-	}
+	exceptions.HandleOSOpenFileError(err, "Error reading numbers.txt:")
 	defer file.Close()
 
-	if _, err := file.WriteString(phoneNumber + "\n"); err != nil {
-		log.Println("Error writing to numbers.txt:", err)
-		return
-	}
+	_, err = file.WriteString(phoneNumber + "\n")
+	exceptions.HandleOSOpenFileError(err, "Error writing to numbers.txt:")
 }
 
 func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
 	Logger(phoneNumber, message, loglevel)
 
 	filePath, exist := os.LookupEnv(LOG_FILE_PATH)
-	if !exist {
-		log.Fatal("no path for config file specified")
-	}
+	exceptions.HandleFilePathError(exist, "no path for config file specified")
 	// Open log file for appending
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		return err
-	}
+	exceptions.HandleOSOpenFileError(err, "Error reading numbers.txt:")
 	defer file.Close()
 
 	// Decode the existing JSON array if the file isn't empty

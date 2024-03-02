@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/honestbank/tech-assignment-backend-engineer/check"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"github.com/honestbank/tech-assignment-backend-engineer/exceptions"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 	"github.com/honestbank/tech-assignment-backend-engineer/reader"
 	"github.com/honestbank/tech-assignment-backend-engineer/writer"
@@ -24,16 +25,16 @@ func DecisionEngine(data model.RecordData) (string, int, error) {
 func isApplicantEligible(data model.RecordData) (string, int, error) {
 	config := Reader.GetConfig(CONFIG_FILE)
 
-	if ok, res, err := IsNumberPreApproved.Check(data, config); ok {
-		// if number is pre-approved, log and return
+	flag, res, err := IsNumberPreApproved.Check(data, config)
+	exceptions.HandleError(err, res)
+
+	// If the number is pre-approved, log the number and return the result
+	if flag {
 		Writer.LogToJSON(data.PhoneNumber, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)
 		return APPROVED, res, nil
-	} else if err != nil {
-		return err.Error(), res, err
 	}
 
-	//If number is not pre-approved, create other eligibility checks
-	// Start the checks
+	//Else Start other eligibility checks
 	if ok, res, err := Eligibility.Check(data, config); !ok {
 		return DECLINED, res, err
 	}

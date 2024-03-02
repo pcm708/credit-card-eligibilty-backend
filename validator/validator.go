@@ -1,11 +1,45 @@
 package validator
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io"
+	"log"
+	"net/http"
 	"regexp"
 
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
 )
+
+// processRequestBody processes the request body
+// It checks for any validation errors or malformed json,
+// If passes all checks returns a RecordData object.
+func ProcessRequestBody(req *http.Request) (model.RecordData, error) {
+	var data model.RecordData
+
+	bodyBytes, err := io.ReadAll(req.Body)
+	if err != nil {
+		log.Println(LOG_LEVEL_ERROR + "error reading request body: " + err.Error())
+		return data, err
+	}
+
+	req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+	err = json.NewDecoder(req.Body).Decode(&data)
+	if err != nil {
+		log.Println(LOG_LEVEL_ERROR+"error decoding request body: ", err.Error(), "\n", string(bodyBytes))
+		return data, err
+	}
+
+	vErr := ValidateRecordData(data)
+	if vErr != "" {
+		log.Println(LOG_LEVEL_ERROR + "error validating request body: " + vErr + "\n" + string(bodyBytes))
+		return data, errors.New(vErr)
+	}
+
+	return data, nil
+}
 
 // ValidateRecordData validates the data in a RecordData object.
 // It checks if any fields are blank, if the income is negative, if the number of credit cards is negative,
