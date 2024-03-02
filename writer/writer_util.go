@@ -28,8 +28,8 @@ type WriterInterface interface {
 type WriterImpl struct{}
 
 func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) {
-	//storePreApprovedNumber_Cloud(phoneNumber)
-	storePreApprovedNumber_Local(phoneNumber)
+	storePreApprovedNumber_Cloud(phoneNumber)
+	//storePreApprovedNumber_Local(phoneNumber)
 }
 
 // StorePreApprovedNumber stores a pre-approved phone number into the cloud server

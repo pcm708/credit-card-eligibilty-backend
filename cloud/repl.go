@@ -63,16 +63,25 @@ func StoreNewNumber(phoneNumber string) (string, int, error) {
 	url := fmt.Sprintf("%s/numbers/add?phone_number=%s", baseURL, phoneNumber)
 	// Create a new PUT request with an empty body
 	req, err := http.NewRequest(http.MethodPut, url, nil)
-	exceptions.HandleError(err, http.StatusInternalServerError)
+	if err != nil {
+		return err.Error(), http.StatusInternalServerError, err
+	}
+	//exceptions.HandleError(err, http.StatusInternalServerError)
 
 	// Send the PUT request
 	client := http.Client{}
 	resp, err := client.Do(req)
-	exceptions.HandleError(err, http.StatusInternalServerError)
-
+	if err != nil {
+		return err.Error(), http.StatusInternalServerError, err
+	}
 	defer resp.Body.Close()
+	//exceptions.HandleError(err, http.StatusInternalServerError)
+
 	// Check the response status
-	exceptions.HandleStatusCodeNot200Error(resp, err)
+	//exceptions.HandleStatusCodeNot200Error(resp, err)
+	if resp.StatusCode != http.StatusOK {
+		return "unexpected error code", resp.StatusCode, err
+	}
 	log.Println(constants.LOG_LEVEL_INFO + "Successfully stored new number on the database")
 	return "", http.StatusOK, nil
 }

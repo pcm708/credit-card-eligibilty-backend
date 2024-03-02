@@ -33,8 +33,8 @@ var JSON_RECORDS_5 string = ".././5-records.json"
 var JSON_RECORDS_1000 string = ".././1000-records.json"
 
 // server properties
-var SERVER_BASE_URL string = "http://192.168.1.107"
+var SERVER_BASE_URL string = "http://192.168.1.100"
 var SERVER_PORT string = "8080"
-var REDIS_BASE_URL string = "192.168.1.107"
+var REDIS_BASE_URL string = "192.168.1.100"
 var REDIS_PORT string = "6379"
 var CLOUD_TIMEOUT int = 10
