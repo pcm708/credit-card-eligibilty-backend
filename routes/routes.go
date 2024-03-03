@@ -15,7 +15,8 @@ func SetupRoutes() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/add", controllers.AddNumber)
 
-	rateLimiter := middleware.NewRateLimiter(constants.MAX_REQUESTS, time.Duration(constants.RATE_LIMITER_DURATION)*time.Minute)
+	rateLimiter := middleware.NewRateLimiter(constants.MAX_REQUESTS, time.Minute)
 	mux.Handle("/process", rateLimiter(http.HandlerFunc(controllers.ProcessData)))
+	//mux.HandleFunc("/process", controllers.ProcessData)
 	return mux
 }

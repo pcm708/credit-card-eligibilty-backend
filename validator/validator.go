@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"github.com/google/uuid"
 	"io"
 	"log"
 	"net/http"
@@ -16,29 +17,30 @@ import (
 // processRequestBody processes the request body
 // It checks for any validation errors or malformed json,
 // If passes all checks returns a RecordData object.
-func ProcessRequestBody(req *http.Request) (model.RecordData, int, error) {
+func ProcessRequestBody(req *http.Request) (model.RecordData, int, error, string) {
+	uid := uuid.New().String()
 	var data model.RecordData
 
 	bodyBytes, err := io.ReadAll(req.Body)
 	if err != nil {
-		log.Println(LOG_LEVEL_ERROR + "error reading request body: " + err.Error())
-		return data, http.StatusInternalServerError, err
+		log.Println(LOG_LEVEL_ERROR, uid, " error reading request body: "+err.Error())
+		return data, http.StatusInternalServerError, err, uid
 	}
 
 	req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 	err = json.NewDecoder(req.Body).Decode(&data)
 	if err != nil {
-		log.Println(LOG_LEVEL_ERROR, "error decoding request body: ", err.Error(), "\n", string(bodyBytes))
-		return data, http.StatusBadRequest, err
+		log.Println(LOG_LEVEL_ERROR, uid, " error decoding request body ", err.Error())
+		return data, http.StatusBadRequest, err, uid
 	}
 
 	vErr := ValidateRecordData(data)
 	if vErr != "" {
-		log.Println(LOG_LEVEL_ERROR + "error validating request body: " + vErr + "\n" + string(bodyBytes))
-		return data, http.StatusBadRequest, errors.New(vErr)
+		log.Println(LOG_LEVEL_ERROR, uid, " error validating request body: "+vErr)
+		return data, http.StatusBadRequest, errors.New(vErr), uid
 	}
 
-	return data, http.StatusOK, nil
+	return data, http.StatusOK, nil, ""
 }
 
 // ValidateRecordData validates the data in a RecordData object.

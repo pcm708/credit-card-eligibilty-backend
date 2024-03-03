@@ -40,7 +40,7 @@ type PoliticallyExposedCheck struct {
 	next ICheck
 }
 
-func (n *NumberPreApprovedCheck) Check(data model.RecordData) (bool, int, error) {
+func (n *NumberPreApprovedCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	flag, err := db.CheckIfNumberPresent(data.PhoneNumber)
 	if err != nil {
 		return false, http.StatusServiceUnavailable, err
@@ -48,77 +48,77 @@ func (n *NumberPreApprovedCheck) Check(data model.RecordData) (bool, int, error)
 	return flag, http.StatusOK, err
 }
 
-func (a *AgeCheck) Check(data model.RecordData) (bool, int, error) {
+func (a *AgeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	if data.Age >= MIN_AGE {
 		if a.next != nil {
-			return a.next.Check(data)
+			return a.next.Check(data, uid)
 		}
 		return true, http.StatusOK, nil
 	}
-	Writer.LogToJSON(data.PhoneNumber, INVALID_AGE, DECLINED, LOG_LEVEL_WARN)
+	Writer.LogToJSON(uid, INVALID_AGE, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
 
-func (a *AreaCodeCheck) Check(data model.RecordData) (bool, int, error) {
+func (a *AreaCodeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	areaCodeStr := string(data.PhoneNumber[0])
 	areaCode, err := strconv.Atoi(areaCodeStr)
 	if err != nil {
-		Writer.LogToJSON(data.PhoneNumber, INVALID_AREA_CODE, DECLINED, LOG_LEVEL_ERROR)
+		Writer.LogToJSON(uid, INVALID_AREA_CODE, DECLINED, LOG_LEVEL_ERROR)
 		return false, http.StatusInternalServerError, err
 	}
 	for _, code := range ALLOWED_AREA_CODE {
 		if areaCode == code {
 			if a.next != nil {
-				return a.next.Check(data)
+				return a.next.Check(data, uid)
 			}
 			return true, http.StatusOK, nil
 		}
 	}
-	Writer.LogToJSON(data.PhoneNumber, INVALID_AREA_CODE, DECLINED, LOG_LEVEL_WARN)
+	Writer.LogToJSON(uid, INVALID_AREA_CODE, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
 
-func (n *NumberOfCreditCardsCheck) Check(data model.RecordData) (bool, int, error) {
+func (n *NumberOfCreditCardsCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= MAX_NUMBER_OF_CC {
 		if n.next != nil {
-			return n.next.Check(data)
+			return n.next.Check(data, uid)
 		}
 		return true, http.StatusOK, nil
 	}
-	Writer.LogToJSON(data.PhoneNumber, INVALID_CC_NUMBER, DECLINED, LOG_LEVEL_WARN)
+	Writer.LogToJSON(uid, INVALID_CC_NUMBER, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
 
-func (i *IncomeCheck) Check(data model.RecordData) (bool, int, error) {
+func (i *IncomeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	if data.Income >= MIN_INCOME {
 		if i.next != nil {
-			return i.next.Check(data)
+			return i.next.Check(data, uid)
 		}
 		return true, http.StatusOK, nil
 	}
-	Writer.LogToJSON(data.PhoneNumber, INVALID_INCOME, DECLINED, LOG_LEVEL_WARN)
+	Writer.LogToJSON(uid, INVALID_INCOME, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
 
-func (c *CreditRiskScoreCheck) Check(data model.RecordData) (bool, int, error) {
+func (c *CreditRiskScoreCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	if data.NumberOfCreditCards != nil &&
 		DESIRED_CREDIT_RISK_SCORE == calculateCreditRisk(data.Age, *data.NumberOfCreditCards) {
 		if c.next != nil {
-			return c.next.Check(data)
+			return c.next.Check(data, uid)
 		}
 		return true, http.StatusOK, nil
 	}
-	Writer.LogToJSON(data.PhoneNumber, INVALID_CREDIT_RISK_SCORE, DECLINED, LOG_LEVEL_WARN)
+	Writer.LogToJSON(uid, INVALID_CREDIT_RISK_SCORE, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
 
-func (p *PoliticallyExposedCheck) Check(data model.RecordData) (bool, int, error) {
+func (p *PoliticallyExposedCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	if data.PoliticallyExposed != nil && *data.PoliticallyExposed {
-		Writer.LogToJSON(data.PhoneNumber, POLITICALLY_EXPOSED, DECLINED, LOG_LEVEL_WARN)
+		Writer.LogToJSON(uid, POLITICALLY_EXPOSED, DECLINED, LOG_LEVEL_WARN)
 		return false, http.StatusOK, nil
 	}
 	if p.next != nil {
-		return p.next.Check(data)
+		return p.next.Check(data, uid)
 	}
 	return true, http.StatusOK, nil
 }

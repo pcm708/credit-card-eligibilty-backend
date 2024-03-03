@@ -14,9 +14,9 @@ var MAX_REQUESTS int = 10
 var RATE_LIMITER_DURATION int = 1
 
 // server properties
-var CLOUD_DB_URL string = "192.168.1.100"
+var CLOUD_DB_URL string = "192.168.1.107"
 var DB_PORT string = "3306"
-var REDIS_BASE_URL string = "192.168.1.100"
+var REDIS_BASE_URL string = "192.168.1.107"
 var REDIS_PORT string = "6379"
 
 // constants for decision
@@ -29,7 +29,7 @@ var POLITICALLY_EXPOSED string = "applicant is politically exposed"
 var PREAPPROVED_NUMBER string = "number pre-approved"
 var APPROVED string = "approved"
 var DECLINED string = "declined"
-var NUMBER_LOGGED string = "phone number stored in logs"
+var NUMBER_LOGGED string = "number stored in DB"
 
 // constants for logging
 var LOG_LEVEL_INFO string = "[INFO]    :: "

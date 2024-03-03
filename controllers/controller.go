@@ -13,20 +13,20 @@ func ProcessData(resp http.ResponseWriter, req *http.Request) {
 	case http.MethodPost:
 		defer req.Body.Close()
 		// Sanitizing and validating the request body
-		data, status, err := validator.ProcessRequestBody(req)
+		data, status, err, uid := validator.ProcessRequestBody(req)
 		if err != nil {
-			handler.ErrorHandler(err, status, resp)
+			handler.ErrorHandler(err, status, resp, uid)
 			return
 		}
 
 		// Performing the decision logic here
-		result, status, err := services.DecisionEngine(data)
+		result, status, err, uid := services.DecisionEngine(data)
 		if err != nil {
-			handler.ErrorHandler(err, status, resp)
+			handler.ErrorHandler(err, status, resp, uid)
 			return
 		}
 
-		handler.ResponseHandler(result, resp)
+		handler.ResponseHandler(result, resp, uid)
 		return
 	default:
 		handler.DefaultResponseHandler(resp)

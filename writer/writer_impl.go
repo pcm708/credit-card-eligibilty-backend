@@ -2,8 +2,8 @@ package writer
 
 import (
 	"encoding/json"
-	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/db"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"time"
@@ -23,10 +23,18 @@ func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) error {
 }
 
 // LogToJSON logs the decision to a JSON file
-func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string, loglevel string) error {
-	log.Println(loglevel, phoneNumber+", "+message)
+func (c *WriterImpl) LogToJSON(uuid string, message string, status string, loglevel string) error {
+	log.Println(loglevel, uuid+": "+message)
+	// Load environment variables from .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-	filePath := LOG_FILE_PATH
+	filePath, exist := os.LookupEnv("LOG_FILE_PATH")
+	if !exist {
+		log.Fatal("no path for config file specified")
+	}
 	// Open log file for appending
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
@@ -44,10 +52,10 @@ func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string
 	}
 	// Append the new log entry
 	logs = append(logs, model.LogEntry{
-		PhoneNumber: phoneNumber,
-		Status:      status,
-		Message:     message,
-		Timestamp:   time.Now().Format("2006-01-02 15:04:05"),
+		Request_ID: uuid,
+		Status:     status,
+		Message:    message,
+		Timestamp:  time.Now().Format("2006-01-02 15:04:05"),
 	})
 	if _, err := file.Seek(0, 0); err != nil {
 		return err

@@ -15,7 +15,8 @@ import (
 )
 
 func TestDecisionEngineWithJsonRecords(t *testing.T) {
-	services.EligibilityChecker = &check.MockEligibilityCheck{}
+	check.Writer = &writer.MockWriterImpl{}
+	services.EligibilityChecker = check.CreateEligibilityChecks()
 	services.IsNumberPreApproved = &check.MockNumberPreApprovedCheck{}
 	services.Writer = &writer.MockWriterImpl{}
 
@@ -37,7 +38,7 @@ func TestDecisionEngineWithJsonRecords(t *testing.T) {
 	for i, data := range recordData {
 		t.Run("TestRecord_"+strconv.Itoa(i+1), func(t *testing.T) {
 			dummyData := data
-			result, _, _ := services.DecisionEngine(dummyData)
+			result, _, _, _ := services.DecisionEngine(dummyData)
 			assert.Equal(t, DECLINED, result)
 		})
 	}

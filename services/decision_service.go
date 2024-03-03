@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/google/uuid"
 	"github.com/honestbank/tech-assignment-backend-engineer/check"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
@@ -12,26 +13,27 @@ var IsNumberPreApproved = check.CreatePhoneNumberCheck()
 var EligibilityChecker = check.CreateEligibilityChecks()
 var Writer writer.IWriter = &writer.WriterImpl{}
 
-func DecisionEngine(data model.RecordData) (string, int, error) {
-	return isApplicantEligible(data)
+func DecisionEngine(data model.RecordData) (string, int, error, string) {
+	uid := uuid.New().String()
+	status, statusCode, err := isApplicantEligible(data, uid)
+	return status, statusCode, err, uid
 }
 
-func isApplicantEligible(data model.RecordData) (string, int, error) {
+func isApplicantEligible(data model.RecordData, uid string) (string, int, error) {
 	// Check if the number is pre-approved
-	flag, _, err := IsNumberPreApproved.Check(data)
+	flag, _, err := IsNumberPreApproved.Check(data, uid)
 	if err != nil {
 		return DECLINED, http.StatusServiceUnavailable, err
 	}
 	if flag {
-		err = Writer.LogToJSON(data.PhoneNumber, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)
+		err = Writer.LogToJSON(uid, PREAPPROVED_NUMBER, APPROVED, LOG_LEVEL_INFO)
 		if err != nil {
 			return DECLINED, http.StatusInternalServerError, err
 		}
 		return APPROVED, http.StatusOK, nil
 	}
-
 	//Else Start other eligibility checks
-	eligibilityChecks, status, err := EligibilityChecker.Check(data)
+	eligibilityChecks, status, err := EligibilityChecker.Check(data, uid)
 	if err != nil {
 		return DECLINED, status, err
 	}
@@ -46,7 +48,7 @@ func isApplicantEligible(data model.RecordData) (string, int, error) {
 	}
 
 	// Log the decision
-	err = Writer.LogToJSON(data.PhoneNumber, NUMBER_LOGGED, APPROVED, LOG_LEVEL_INFO)
+	err = Writer.LogToJSON(uid, NUMBER_LOGGED, APPROVED, LOG_LEVEL_INFO)
 	if err != nil {
 		return DECLINED, http.StatusInternalServerError, err
 	}

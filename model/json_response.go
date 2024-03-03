@@ -5,7 +5,7 @@ type JSONResponse struct {
 	Status string `json:"status"`
 }
 
-// JsonFor4XX represents the structure of the JSON response for 4XX errors
+// JsonForError represents the structure of the JSON response for 4XX errors
 type JsonError struct {
 	Success bool   `json:"success"`
 	Message string `json:"message,omitempty"`
@@ -13,8 +13,8 @@ type JsonError struct {
 
 // LogEntry represents the structure of the log entry
 type LogEntry struct {
-	PhoneNumber string `json:"phone_number"`
-	Status      string `json:"status"`
-	Message     string `json:"message"`
-	Timestamp   string `json:"timestamp"`
+	Request_ID string `json:"request-id"`
+	Status     string `json:"status"`
+	Message    string `json:"message"`
+	Timestamp  string `json:"timestamp"`
 }

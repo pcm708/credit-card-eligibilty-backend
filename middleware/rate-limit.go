@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
+	"log"
 	"net"
 	"net/http"
 	"strconv"
@@ -23,10 +24,11 @@ func NewRateLimiter(limit int, window time.Duration) func(http.Handler) http.Han
 			// Increment the request count
 			count, err := rdb.Incr(ctx, ip).Result()
 			if err != nil {
+				log.Println(err.Error())
 				// Create a JsonError instance
 				err := model.JsonError{
 					Success: false,
-					Message: "Error contacting redis db",
+					Message: string(http.StatusInternalServerError),
 				}
 				// Convert the JsonError instance into JSON
 				errJson, _ := json.Marshal(err)
