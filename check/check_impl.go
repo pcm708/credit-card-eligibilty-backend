@@ -79,7 +79,7 @@ func (a *AreaCodeCheck) Check(data model.RecordData) (bool, int, error) {
 }
 
 func (n *NumberOfCreditCardsCheck) Check(data model.RecordData) (bool, int, error) {
-	if data.NumberOfCreditCards <= MIN_NUMBER_OF_CC {
+	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= MAX_NUMBER_OF_CC {
 		if n.next != nil {
 			return n.next.Check(data)
 		}
@@ -101,7 +101,8 @@ func (i *IncomeCheck) Check(data model.RecordData) (bool, int, error) {
 }
 
 func (c *CreditRiskScoreCheck) Check(data model.RecordData) (bool, int, error) {
-	if DESIRED_CREDIT_RISK_SCORE == calculateCreditRisk(data.Age, data.NumberOfCreditCards) {
+	if data.NumberOfCreditCards != nil &&
+		DESIRED_CREDIT_RISK_SCORE == calculateCreditRisk(data.Age, *data.NumberOfCreditCards) {
 		if c.next != nil {
 			return c.next.Check(data)
 		}

@@ -20,7 +20,7 @@ func TestDecisionEngineWithJsonRecords(t *testing.T) {
 	services.Writer = &writer.MockWriterImpl{}
 
 	// Open the JSON file
-	jsonFile, err := os.Open(JSON_RECORDS_5)
+	jsonFile, err := os.Open(JSON_RECORDS_1000)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func TestDecisionEngineWithJsonRecords(t *testing.T) {
 		t.Run("TestRecord_"+strconv.Itoa(i+1), func(t *testing.T) {
 			dummyData := data
 			result, _, _ := services.DecisionEngine(dummyData)
-			assert.Equal(t, APPROVED, result)
+			assert.Equal(t, DECLINED, result)
 		})
 	}
 }

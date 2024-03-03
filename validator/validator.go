@@ -48,7 +48,7 @@ func ProcessRequestBody(req *http.Request) (model.RecordData, int, error) {
 
 func ValidateRecordData(data model.RecordData) string {
 	// Check if any fields are blank
-	if data.Income == 0 || data.NumberOfCreditCards == 0 ||
+	if data.Income == 0 || data.NumberOfCreditCards == nil ||
 		data.Age == 0 || data.PoliticallyExposed == nil ||
 		data.PhoneNumber == "" {
 		return NO_FIELDS_BLANK
@@ -58,7 +58,7 @@ func ValidateRecordData(data model.RecordData) string {
 		return INCOME_NEGATIVE
 	}
 	// Check if the number of credit cards is negative
-	if data.NumberOfCreditCards < 0 {
+	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards < 0 {
 		return CC_NEGATIVE
 	}
 	// Check if the age is negative

@@ -5,7 +5,7 @@ package constants
 // configs
 var MIN_AGE int = 18
 var MIN_INCOME int = 100000
-var MIN_NUMBER_OF_CC int = 3
+var MAX_NUMBER_OF_CC int = 3
 var ALLOWED_AREA_CODE = []int{0, 2, 5, 8}
 var DESIRED_CREDIT_RISK_SCORE string = "LOW"
 
