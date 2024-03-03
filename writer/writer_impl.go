@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/honestbank/tech-assignment-backend-engineer/db"
-	"github.com/honestbank/tech-assignment-backend-engineer/exceptions"
 	"log"
 	"os"
 	"time"
@@ -30,7 +29,9 @@ func (c *WriterImpl) LogToJSON(phoneNumber string, message string, status string
 	filePath := LOG_FILE_PATH
 	// Open log file for appending
 	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
-	exceptions.HandleOSOpenFileError(err, "Error reading numbers.txt:")
+	if err != nil {
+		return err
+	}
 	defer file.Close()
 
 	// Decode the existing JSON array if the file isn't empty

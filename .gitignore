@@ -74,7 +74,7 @@
 *.ipr
 *.iws
 
-# JetBrains/Android Studio Ignore exceptions
+# JetBrains/Android Studio Ignore handler
 !/.idea/vcs.xml
 !/.idea/fileTemplates/
 !/.idea/inspectionProfiles/
@@ -450,7 +450,7 @@ lint/tmp/
 *.iws
 /.idea/*
 
-# IDEA/Android Studio Ignore exceptions
+# IDEA/Android Studio Ignore handler
 # Uncomment for Android repos
 # ---
 # !/.idea/vcs.xml
