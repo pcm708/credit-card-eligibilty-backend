@@ -2,8 +2,6 @@ package constants
 
 // constants for the application
 
-var CLOUD bool = false
-
 // configs
 var MIN_AGE int = 18
 var MIN_INCOME int = 100000
@@ -20,7 +18,6 @@ var CLOUD_DB_URL string = "192.168.1.100"
 var DB_PORT string = "3306"
 var REDIS_BASE_URL string = "192.168.1.100"
 var REDIS_PORT string = "6379"
-var CLOUD_TIMEOUT int = 10
 
 // constants for decision
 var INVALID_AREA_CODE string = "area code is not valid"

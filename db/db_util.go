@@ -1,7 +1,9 @@
 package db
 
 import (
+	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
@@ -57,8 +59,13 @@ func createTableIfNotExists() error {
 }
 
 func StoreNewNumber(phoneNumber string) error {
+	// Create a new SHA256 hash.
+	hasher := sha256.New()
+	hasher.Write([]byte(phoneNumber))
+	hashedPhoneNumber := hex.EncodeToString(hasher.Sum(nil))
+
 	query := `INSERT INTO phone_numbers (number) VALUES (?)`
-	_, err := db.Exec(query, phoneNumber)
+	_, err := db.Exec(query, hashedPhoneNumber)
 	if err != nil {
 		return err
 	}
@@ -66,9 +73,14 @@ func StoreNewNumber(phoneNumber string) error {
 }
 
 func CheckIfNumberPresent(number string) (bool, error) {
+	// Hash the input phone number
+	hasher := sha256.New()
+	hasher.Write([]byte(number))
+	hashedPhoneNumber := hex.EncodeToString(hasher.Sum(nil))
+
 	var exists bool
 	query := `SELECT exists (SELECT 1 FROM phone_numbers WHERE number=?)`
-	err := db.QueryRow(query, number).Scan(&exists)
+	err := db.QueryRow(query, hashedPhoneNumber).Scan(&exists)
 	if err != nil && err != sql.ErrNoRows {
 		return false, err
 	}
