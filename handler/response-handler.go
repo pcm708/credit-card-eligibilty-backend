@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"github.com/honestbank/tech-assignment-backend-engineer/model"
+	"log"
 	"net/http"
 )
 
@@ -45,4 +46,35 @@ func ResponseHandler(result string, resp http.ResponseWriter, uid string) {
 func DefaultResponseHandler(resp http.ResponseWriter) {
 	resp.Header().Set("Content-Type", "application/json")
 	resp.WriteHeader(http.StatusNotFound)
+}
+
+func RedisConnectionErrorResponse(err error, w http.ResponseWriter) {
+	log.Println(err.Error())
+	// Create a JsonError instance
+	errResp := model.JsonError{
+		Success: false,
+		Message: "redis host seems down",
+	}
+	// Convert the JsonError instance into JSON
+	errJson, _ := json.Marshal(errResp)
+	// Set the Content-Type header to application/json
+	w.Header().Set("Content-Type", "application/json")
+	// Write the JSON error to the response with a 429 status code
+	w.WriteHeader(http.StatusServiceUnavailable)
+	w.Write(errJson)
+}
+
+func RateLimitExceededResponse(w http.ResponseWriter) {
+	// Create a JsonError instance
+	errResp := model.JsonError{
+		Success: false,
+		Message: "Rate limit exceeded",
+	}
+	// Convert the JsonError instance into JSON
+	errJson, _ := json.Marshal(errResp)
+	// Set the Content-Type header to application/json
+	w.Header().Set("Content-Type", "application/json")
+	// Write the JSON error to the response with a 429 status code
+	w.WriteHeader(http.StatusTooManyRequests)
+	w.Write(errJson)
 }

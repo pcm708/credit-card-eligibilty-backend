@@ -2,9 +2,7 @@ package middleware
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/honestbank/tech-assignment-backend-engineer/model"
-	"log"
+	"github.com/honestbank/tech-assignment-backend-engineer/handler"
 	"net"
 	"net/http"
 	"strconv"
@@ -18,25 +16,10 @@ func NewRateLimiter(limit int, window time.Duration) func(http.Handler) http.Han
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ip, _, err := net.SplitHostPort(r.RemoteAddr)
-			if err != nil {
-				// handle error
-			}
 			// Increment the request count
 			count, err := rdb.Incr(ctx, ip).Result()
 			if err != nil {
-				log.Println(err.Error())
-				// Create a JsonError instance
-				err := model.JsonError{
-					Success: false,
-					Message: string(http.StatusInternalServerError),
-				}
-				// Convert the JsonError instance into JSON
-				errJson, _ := json.Marshal(err)
-				// Set the Content-Type header to application/json
-				w.Header().Set("Content-Type", "application/json")
-				// Write the JSON error to the response with a 429 status code
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write(errJson)
+				handler.RedisConnectionErrorResponse(err, w)
 				return
 			}
 
@@ -46,18 +29,7 @@ func NewRateLimiter(limit int, window time.Duration) func(http.Handler) http.Han
 			}
 
 			if count > int64(limit) {
-				// Create a JsonError instance
-				err := model.JsonError{
-					Success: false,
-					Message: "Rate limit exceeded",
-				}
-				// Convert the JsonError instance into JSON
-				errJson, _ := json.Marshal(err)
-				// Set the Content-Type header to application/json
-				w.Header().Set("Content-Type", "application/json")
-				// Write the JSON error to the response with a 429 status code
-				w.WriteHeader(http.StatusTooManyRequests)
-				w.Write(errJson)
+				handler.RateLimitExceededResponse(w)
 				return
 			}
 

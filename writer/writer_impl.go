@@ -24,7 +24,7 @@ func (c *WriterImpl) StorePreApprovedNumber(phoneNumber string) error {
 
 // LogToJSON logs the decision to a JSON file
 func (c *WriterImpl) LogToJSON(uuid string, message string, status string, loglevel string) error {
-	log.Println(loglevel, uuid+": "+message)
+	log.Println(loglevel, uuid+" "+message)
 	// Load environment variables from .env file
 	err := godotenv.Load()
 	if err != nil {
