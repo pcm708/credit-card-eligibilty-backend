@@ -412,5 +412,89 @@
         "status": "approved",
         "message": "number pre-approved",
         "timestamp": "2024-03-04 03:46:34"
+    },
+    {
+        "request-id": "86c2268d-c797-4b2d-9f7d-2887a642c77f",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-04 05:20:58"
+    },
+    {
+        "request-id": "36eb8c48-30dd-49d5-b6c5-5c84f4853897",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-04 05:21:05"
+    },
+    {
+        "request-id": "855ca762-b66a-4ff5-9d3e-5b9ea6247eb8",
+        "status": "declined",
+        "message": "income is not valid",
+        "timestamp": "2024-03-04 05:21:14"
+    },
+    {
+        "request-id": "d4d5107c-9da7-47ab-9dfe-5a6f6152a19a",
+        "status": "approved",
+        "message": "number stored in DB",
+        "timestamp": "2024-03-04 05:21:26"
+    },
+    {
+        "request-id": "0a8e891e-32f5-49f9-9f35-374943c2f499",
+        "status": "declined",
+        "message": "credit risk score is not low",
+        "timestamp": "2024-03-04 05:21:34"
+    },
+    {
+        "request-id": "95184f40-7a71-40fc-b14b-c4f25cdeae9a",
+        "status": "declined",
+        "message": "credit risk score is not low",
+        "timestamp": "2024-03-04 05:21:43"
+    },
+    {
+        "request-id": "8d0c7130-4e37-413b-9ff0-a2d1c6d1af99",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-04 05:22:05"
+    },
+    {
+        "request-id": "bcc7478a-5b38-408c-ac7a-e1349816ce99",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-03-04 05:22:06"
+    },
+    {
+        "request-id": "f4fbda73-05f6-41b3-8288-156b1618db40",
+        "status": "declined",
+        "message": "number of credit cards are not valid",
+        "timestamp": "2024-03-04 05:22:12"
+    },
+    {
+        "request-id": "b787a401-da2c-4cf4-846f-b7721d963605",
+        "status": "declined",
+        "message": "number of credit cards are not valid",
+        "timestamp": "2024-03-04 05:22:19"
+    },
+    {
+        "request-id": "53a4a054-19b7-4c04-82e3-116910254245",
+        "status": "declined",
+        "message": "number of credit cards are not valid",
+        "timestamp": "2024-03-04 05:22:58"
+    },
+    {
+        "request-id": "03b1575d-4a71-4b69-8d19-9ed0c595e2ba",
+        "status": "declined",
+        "message": "credit risk score is not low",
+        "timestamp": "2024-03-04 05:23:06"
+    },
+    {
+        "request-id": "9ced3556-4db2-4de2-943e-0e25eb92adc7",
+        "status": "declined",
+        "message": "credit risk score is not low",
+        "timestamp": "2024-03-04 05:23:17"
+    },
+    {
+        "request-id": "4c90960c-3e06-45fd-bb91-1b0a642eadaa",
+        "status": "approved",
+        "message": "number stored in DB",
+        "timestamp": "2024-03-04 05:23:22"
     }
 ]

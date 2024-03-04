@@ -12,31 +12,9 @@ import (
 
 var Writer writer.IWriter = &writer.WriterImpl{}
 
+// .
+// NumberPreApprovedCheck checks if the number is already pre-approved or not
 type NumberPreApprovedCheck struct {
-	next ICheck
-}
-
-type AgeCheck struct {
-	next ICheck
-}
-
-type AreaCodeCheck struct {
-	next ICheck
-}
-
-type IncomeCheck struct {
-	next ICheck
-}
-
-type NumberOfCreditCardsCheck struct {
-	next ICheck
-}
-
-type CreditRiskScoreCheck struct {
-	next ICheck
-}
-
-type PoliticallyExposedCheck struct {
 	next ICheck
 }
 
@@ -46,6 +24,15 @@ func (n *NumberPreApprovedCheck) Check(data model.RecordData, uid string) (bool,
 		return false, http.StatusServiceUnavailable, err
 	}
 	return flag, http.StatusOK, err
+}
+func (n *NumberPreApprovedCheck) SetNext(check ICheck) {
+	n.next = nil
+}
+
+// .
+// AgeCheck checks if the age is valid or not
+type AgeCheck struct {
+	next ICheck
 }
 
 func (a *AgeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
@@ -57,6 +44,15 @@ func (a *AgeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	}
 	Writer.LogToJSON(uid, INVALID_AGE, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
+}
+func (a *AgeCheck) SetNext(check ICheck) {
+	a.next = check
+}
+
+// .
+// AreaCodeCheck checks if the area code is allowed or not
+type AreaCodeCheck struct {
+	next ICheck
 }
 
 func (a *AreaCodeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
@@ -77,16 +73,14 @@ func (a *AreaCodeCheck) Check(data model.RecordData, uid string) (bool, int, err
 	Writer.LogToJSON(uid, INVALID_AREA_CODE, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
+func (a *AreaCodeCheck) SetNext(check ICheck) {
+	a.next = check
+}
 
-func (n *NumberOfCreditCardsCheck) Check(data model.RecordData, uid string) (bool, int, error) {
-	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= MAX_NUMBER_OF_CC {
-		if n.next != nil {
-			return n.next.Check(data, uid)
-		}
-		return true, http.StatusOK, nil
-	}
-	Writer.LogToJSON(uid, INVALID_CC_NUMBER, DECLINED, LOG_LEVEL_WARN)
-	return false, http.StatusOK, nil
+// .
+// IncomeCheck checks if the income is valid or not
+type IncomeCheck struct {
+	next ICheck
 }
 
 func (i *IncomeCheck) Check(data model.RecordData, uid string) (bool, int, error) {
@@ -98,6 +92,35 @@ func (i *IncomeCheck) Check(data model.RecordData, uid string) (bool, int, error
 	}
 	Writer.LogToJSON(uid, INVALID_INCOME, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
+}
+func (i *IncomeCheck) SetNext(check ICheck) {
+	i.next = check
+}
+
+// .
+// NumberOfCreditCardsCheck checks if the number of credit cards is under the limit or not
+type NumberOfCreditCardsCheck struct {
+	next ICheck
+}
+
+func (n *NumberOfCreditCardsCheck) Check(data model.RecordData, uid string) (bool, int, error) {
+	if data.NumberOfCreditCards != nil && *data.NumberOfCreditCards <= MAX_NUMBER_OF_CC {
+		if n.next != nil {
+			return n.next.Check(data, uid)
+		}
+		return true, http.StatusOK, nil
+	}
+	Writer.LogToJSON(uid, INVALID_CC_NUMBER, DECLINED, LOG_LEVEL_WARN)
+	return false, http.StatusOK, nil
+}
+func (n *NumberOfCreditCardsCheck) SetNext(check ICheck) {
+	n.next = check
+}
+
+// .
+// CreditRiskScoreCheck checks if the credit risk score is Low or not
+type CreditRiskScoreCheck struct {
+	next ICheck
 }
 
 func (c *CreditRiskScoreCheck) Check(data model.RecordData, uid string) (bool, int, error) {
@@ -111,6 +134,15 @@ func (c *CreditRiskScoreCheck) Check(data model.RecordData, uid string) (bool, i
 	Writer.LogToJSON(uid, INVALID_CREDIT_RISK_SCORE, DECLINED, LOG_LEVEL_WARN)
 	return false, http.StatusOK, nil
 }
+func (c *CreditRiskScoreCheck) SetNext(check ICheck) {
+	c.next = check
+}
+
+// .
+// PoliticallyExposedCheck checks if the person is politically exposed or not
+type PoliticallyExposedCheck struct {
+	next ICheck
+}
 
 func (p *PoliticallyExposedCheck) Check(data model.RecordData, uid string) (bool, int, error) {
 	if data.PoliticallyExposed != nil && *data.PoliticallyExposed {
@@ -121,64 +153,6 @@ func (p *PoliticallyExposedCheck) Check(data model.RecordData, uid string) (bool
 		return p.next.Check(data, uid)
 	}
 	return true, http.StatusOK, nil
-}
-
-// CreateChecks creates the instances of all checks and sets up the chain of responsibility.
-// It returns the first check in the chain
-func CreateEligibilityChecks() ICheck {
-	// instance creation
-	ageCheck := &AgeCheck{}
-	areaCodeCheck := &AreaCodeCheck{}
-	incomeCheck := &IncomeCheck{}
-	numberOfCreditCardsCheck := &NumberOfCreditCardsCheck{}
-	creditRiskScoreCheck := &CreditRiskScoreCheck{}
-	politicallyExposedCheck := &PoliticallyExposedCheck{}
-
-	// Set up the chain
-	ageCheck.SetNext(areaCodeCheck)
-	areaCodeCheck.SetNext(incomeCheck)
-	incomeCheck.SetNext(numberOfCreditCardsCheck)
-	numberOfCreditCardsCheck.SetNext(creditRiskScoreCheck)
-	creditRiskScoreCheck.SetNext(politicallyExposedCheck)
-
-	// Return the first check in the chain
-	return ageCheck
-}
-
-func CreatePhoneNumberCheck() ICheck {
-	return &NumberPreApprovedCheck{}
-}
-
-// calculateCreditRisk calculates the credit risk score based on the age and number of credit cards.
-func calculateCreditRisk(age, numberOfCreditCard int) string {
-	sum := age + numberOfCreditCard
-	mod := sum % 3
-	if mod == 0 {
-		return "LOW"
-	}
-	if mod == 1 {
-		return "MEDIUM"
-	}
-	return "HIGH"
-}
-
-func (n *NumberPreApprovedCheck) SetNext(check ICheck) {
-	n.next = check
-}
-func (a *AgeCheck) SetNext(check ICheck) {
-	a.next = check
-}
-func (a *AreaCodeCheck) SetNext(check ICheck) {
-	a.next = check
-}
-func (n *NumberOfCreditCardsCheck) SetNext(check ICheck) {
-	n.next = check
-}
-func (i *IncomeCheck) SetNext(check ICheck) {
-	i.next = check
-}
-func (c *CreditRiskScoreCheck) SetNext(check ICheck) {
-	c.next = check
 }
 func (p *PoliticallyExposedCheck) SetNext(check ICheck) {
 	p.next = check
