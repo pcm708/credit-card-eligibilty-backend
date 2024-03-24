@@ -4,6 +4,15 @@
 
 This project is a Decision Engine to approve/decline credit card applicants. It is implemented in Go and uses the `net/http` package to handle HTTP requests.
 
+## High level
+
+- local setup
+
+![image](https://github.com/pcm708/credit-card-eligibilty-backend/assets/52307892/88a93500-fb21-4f14-ab1c-819e6f20a1ee)
+
+- for cloud, redis and db running on windows laptop
+
+
 ## Project Structure
 
 The project is structured as follows:
