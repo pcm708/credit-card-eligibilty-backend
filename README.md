@@ -25,7 +25,28 @@ The project is structured as follows:
 
 ## API
 
-The application exposes a `POST` HTTP endpoint at `/process`:
+
+0th: (for setting up preapproved numbers)
+curl --location 'http://localhost:8080/add' \
+--header 'Content-Type: application/json' \
+--data '[
+    "023-7548-8548",
+    "223-7548-8549",
+    "223-7548-8541",
+    "523-7548-8542"
+]'
+
+1st: The application exposes a `POST` HTTP endpoint at `/process`:
+
+curl --location 'http://localhost:8080/process' \
+--header 'Content-Type: application/json' \
+--data '{
+    "income": 800000,
+    "number_of_credit_cards": 1,
+    "age": 26,
+    "politically_exposed": true,
+    "phone_number": "823-758-8559"
+}'
 
 ### Request Body
 
