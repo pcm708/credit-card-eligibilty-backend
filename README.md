@@ -13,6 +13,7 @@ This project is a Decision Engine to approve/decline credit card applicants. It 
 - for cloud, redis and db running on windows laptop
 - V2:
 - using RDS mysql server to storage data on cloud rather than storing on personal windows laptop,
+- What i did was just creating a publicly accessible DB and setting inbound rule of MYSQL/Aurora on the attached security group. So simple
 - Run the project locally on terminal, go run main.go
 - Uncommented redis implementation for the /process api as im not using redis cloud aws service for now.
 
