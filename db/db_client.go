@@ -5,11 +5,12 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"fmt"
+	"log"
+	"os"
+
 	_ "github.com/go-sql-driver/mysql"
 	. "github.com/honestbank/tech-assignment-backend-engineer/constants"
 	"github.com/joho/godotenv"
-	"log"
-	"os"
 )
 
 var db *sql.DB
@@ -25,7 +26,7 @@ func ConnectToDB() {
 	}
 
 	if os.Getenv("CLOUD") == "true" {
-		dbURL = "root:root@tcp(" + CLOUD_DB_URL + ":" + DB_PORT + ")/number"
+		dbURL = "admin:mypassword@tcp(" + CLOUD_DB_URL + ":" + DB_PORT + ")/number"
 	} else {
 		dbURL = "root:root@tcp(db:" + DB_PORT + ")/number"
 	}

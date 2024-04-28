@@ -496,5 +496,53 @@
         "status": "approved",
         "message": "number stored in DB",
         "timestamp": "2024-03-04 05:23:22"
+    },
+    {
+        "request-id": "2b678c90-4f85-429c-800a-3e8c8e5c67ab",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-04-28 23:56:55"
+    },
+    {
+        "request-id": "b4eeb308-2e36-4325-923f-31cab1a66f79",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-04-28 23:56:56"
+    },
+    {
+        "request-id": "e9d6783f-1edd-4f34-bf7d-b9389f74b2f6",
+        "status": "declined",
+        "message": "applicant is politically exposed",
+        "timestamp": "2024-04-28 23:56:57"
+    },
+    {
+        "request-id": "4fec11c2-4dcc-42ce-b116-f816184683b7",
+        "status": "approved",
+        "message": "number stored in DB",
+        "timestamp": "2024-04-28 23:57:00"
+    },
+    {
+        "request-id": "8377b0dc-7a94-4177-8697-aa9b066ddcd6",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-04-28 23:57:01"
+    },
+    {
+        "request-id": "92d658aa-67ed-4652-9426-f8a54b599764",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-04-28 23:57:02"
+    },
+    {
+        "request-id": "615697b5-ae24-4856-8b1c-b024a7c220cf",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-04-28 23:57:55"
+    },
+    {
+        "request-id": "a911c307-5faf-46ee-a419-ad4710d7ab06",
+        "status": "approved",
+        "message": "number pre-approved",
+        "timestamp": "2024-04-28 23:59:02"
     }
 ]

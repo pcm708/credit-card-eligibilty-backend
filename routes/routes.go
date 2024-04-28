@@ -1,11 +1,10 @@
 package routes
 
 import (
-	"github.com/honestbank/tech-assignment-backend-engineer/constants"
+	"net/http"
+
 	"github.com/honestbank/tech-assignment-backend-engineer/controllers"
 	"github.com/honestbank/tech-assignment-backend-engineer/middleware"
-	"net/http"
-	"time"
 )
 
 var rdb = middleware.RedisClient()
@@ -15,8 +14,8 @@ func SetupRoutes() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/add", controllers.AddNumber)
 
-	rateLimiter := middleware.NewRateLimiter(constants.MAX_REQUESTS, time.Minute)
-	mux.Handle("/process", rateLimiter(http.HandlerFunc(controllers.ProcessData)))
-	//mux.HandleFunc("/process", controllers.ProcessData)
+	// rateLimiter := middleware.NewRateLimiter(constants.MAX_REQUESTS, time.Minute)
+	// mux.Handle("/process", rateLimiter(http.HandlerFunc(controllers.ProcessData)))
+	mux.HandleFunc("/process", controllers.ProcessData)
 	return mux
 }

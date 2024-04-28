@@ -14,7 +14,7 @@ var MAX_REQUESTS int = 10
 var RATE_LIMITER_DURATION int = 1
 
 // server properties
-var CLOUD_DB_URL string = "192.168.1.107"
+var CLOUD_DB_URL string = "mysql-instance.cpgik486c9cp.ap-south-1.rds.amazonaws.com"
 var DB_PORT string = "3306"
 var REDIS_BASE_URL string = "192.168.1.107"
 var REDIS_PORT string = "6379"
